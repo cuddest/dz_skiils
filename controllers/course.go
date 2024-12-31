@@ -1,12 +1,40 @@
 package controllers
 
 import (
+	"context"
 	"database/sql"
+	"errors"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/cuddest/dz-skills/models"
 	"github.com/gin-gonic/gin"
+)
+
+// SQL queries as constants to improve maintainability
+const (
+	createCourseQuery = `
+		INSERT INTO courses (name, description, pricing, duration, image, language, level, teacher_id, category_id) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
+		RETURNING id`
+	
+	getCourseQuery = `
+		SELECT id, name, description, pricing, duration, image, language, level, teacher_id, category_id 
+		FROM courses 
+		WHERE id = $1`
+	
+	getAllCoursesQuery = `
+		SELECT id, name, description, pricing, duration, image, language, level, teacher_id, category_id 
+		FROM courses`
+	
+	updateCourseQuery = `
+		UPDATE courses 
+		SET name = $1, description = $2, pricing = $3, duration = $4, 
+			image = $5, language = $6, level = $7, teacher_id = $8, category_id = $9 
+		WHERE id = $10`
+	
+	deleteCourseQuery = `DELETE FROM courses WHERE id = $1`
 )
 
 type CourseController struct {
@@ -17,53 +45,69 @@ func NewCourseController(db *sql.DB) *CourseController {
 	return &CourseController{db: db}
 }
 
-// Create a new course
-func (h *CourseController) CreateCourse(c *gin.Context) {
-	var course models.Course
+// validateCourse performs basic validation on course data
+func (h *CourseController) validateCourse(course *models.Course) error {
+	if course.Name == "" {
+		return errors.New("course name is required")
+	}
+	if course.Duration <= 0 {
+		return errors.New("course duration must be positive")
+	}
+	if course.TeacherID <= 0 {
+		return errors.New("valid teacher ID is required")
+	}
+	if course.CategoryID <= 0 {
+		return errors.New("valid category ID is required")
+	}
+	return nil
+}
 
-	// Bind JSON input to the Course struct
+func (h *CourseController) CreateCourse(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
+	var course models.Course
 	if err := c.ShouldBindJSON(&course); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	query := `INSERT INTO courses (name, description, pricing, duration, image, language, level, teacher_id, category_id) 
-				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id`
-
-	var id uint
-	err := h.db.QueryRow(query, course.Name, course.Description, course.Pricing, course.Duration, course.Image, course.Language, course.Level, course.TeacherID, course.CategoryID).Scan(&id)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	if err := h.validateCourse(&course); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Set the generated ID and return the created course
+	var id uint
+	err := h.db.QueryRowContext(ctx, createCourseQuery,
+		course.Name, course.Description, course.Pricing,
+		course.Duration, course.Image, course.Language,
+		course.Level, course.TeacherID, course.CategoryID,
+	).Scan(&id)
+
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create course"})
+		return
+	}
+
 	course.ID = id
 	c.JSON(http.StatusCreated, course)
 }
 
-// Get a course by ID
 func (h *CourseController) GetCourse(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
 		return
 	}
 
 	var course models.Course
-	query := `SELECT id, name, description, pricing, duration, image, language, level, teacher_id, category_id 
-			  FROM courses WHERE id = $1`
-
-	err = h.db.QueryRow(query, id).Scan(
-		&course.ID,
-		&course.Name,
-		&course.Description,
-		&course.Pricing,
-		&course.Duration,
-		&course.Image,
-		&course.Language,
-		&course.Level,
-		&course.TeacherID,
+	err = h.db.QueryRowContext(ctx, getCourseQuery, id).Scan(
+		&course.ID, &course.Name, &course.Description,
+		&course.Pricing, &course.Duration, &course.Image,
+		&course.Language, &course.Level, &course.TeacherID,
 		&course.CategoryID,
 	)
 
@@ -71,21 +115,21 @@ func (h *CourseController) GetCourse(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Course not found"})
 		return
 	}
-
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve course"})
 		return
 	}
 
 	c.JSON(http.StatusOK, course)
 }
 
-// Get all courses
 func (h *CourseController) GetAllCourses(c *gin.Context) {
-	rows, err := h.db.Query(`SELECT id, name, description, pricing, duration, image, language, level, teacher_id, category_id 
-							  FROM courses`)
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
+	rows, err := h.db.QueryContext(ctx, getAllCoursesQuery)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve courses"})
 		return
 	}
 	defer rows.Close()
@@ -93,26 +137,45 @@ func (h *CourseController) GetAllCourses(c *gin.Context) {
 	var courses []models.Course
 	for rows.Next() {
 		var course models.Course
-		if err := rows.Scan(&course.ID, &course.Name, &course.Description, &course.Pricing, &course.Duration, &course.Image, &course.Language, &course.Level, &course.TeacherID, &course.CategoryID); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		if err := rows.Scan(
+			&course.ID, &course.Name, &course.Description,
+			&course.Pricing, &course.Duration, &course.Image,
+			&course.Language, &course.Level, &course.TeacherID,
+			&course.CategoryID,
+		); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process courses"})
 			return
 		}
 		courses = append(courses, course)
 	}
 
 	if err := rows.Err(); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error processing courses"})
 		return
 	}
 
 	c.JSON(http.StatusOK, courses)
 }
 
-// Update a course by ID
 func (h *CourseController) UpdateCourse(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
+		return
+	}
+
+	// Check if course exists
+	var exists bool
+	err = h.db.QueryRowContext(ctx, "SELECT EXISTS(SELECT 1 FROM courses WHERE id = $1)", id).Scan(&exists)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check course existence"})
+		return
+	}
+	if !exists {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Course not found"})
 		return
 	}
 
@@ -122,11 +185,29 @@ func (h *CourseController) UpdateCourse(c *gin.Context) {
 		return
 	}
 
-	query := `UPDATE courses SET name = $1, description = $2, pricing = $3, duration = $4, image = $5, language = $6, level = $7, teacher_id = $8, category_id = $9 WHERE id = $10`
-	_, err = h.db.Exec(query, course.Name, course.Description, course.Pricing, course.Duration, course.Image, course.Language, course.Level, course.TeacherID, course.CategoryID, id)
+	if err := h.validateCourse(&course); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	result, err := h.db.ExecContext(ctx, updateCourseQuery,
+		course.Name, course.Description, course.Pricing,
+		course.Duration, course.Image, course.Language,
+		course.Level, course.TeacherID, course.CategoryID, id,
+	)
 
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update course"})
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to confirm update"})
+		return
+	}
+	if rowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Course not found"})
 		return
 	}
 
@@ -134,19 +215,29 @@ func (h *CourseController) UpdateCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, course)
 }
 
-// Delete a course by ID
 func (h *CourseController) DeleteCourse(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID"})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
 		return
 	}
 
-	query := `DELETE FROM courses WHERE id = $1`
-	_, err = h.db.Exec(query, id)
-
+	result, err := h.db.ExecContext(ctx, deleteCourseQuery, id)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to delete course"})
+		return
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to confirm deletion"})
+		return
+	}
+	if rowsAffected == 0 {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Course not found"})
 		return
 	}
 
