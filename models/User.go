@@ -5,7 +5,8 @@ import "golang.org/x/crypto/bcrypt"
 type Student struct {
 	ID       uint       `gorm:"primaryKey" json:"ID"`
 	FullName string     `json:"FullName"`
-	Email    string     `json:"Email"`
+	Username string     `gorm:"unique" json:"username"`
+	Email    string     `gorm:"unique" json:"email"`
 	Password string     `json:"Password"`
 	Picture  string     `json:"Picture"`
 	Courses  []Course   `gorm:"many2many:student_courses;"`
@@ -23,7 +24,8 @@ func (s *Student) SetPassword(password string) {
 type Teacher struct {
 	ID         uint   `gorm:"primaryKey" json:"ID"`
 	FullName   string `json:"FullName"`
-	Email      string `json:"Email"`
+	Username   string `gorm:"unique" json:"username"`
+	Email      string `gorm:"unique" json:"email"`
 	Password   string `json:"Password"`
 	Picture    string `json:"Picture"`
 	Skills     string `json:"Skills"`
