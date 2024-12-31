@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 
+	"github.com/cuddest/dz-skills/models"
 	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -33,7 +34,23 @@ func ConnectDB() error {
 	log.Println("Connected to Database!")
 
 	// Run database migrations
-	err = db.AutoMigrate()
+	err = db.AutoMigrate(
+		models.Answer{},
+		models.Course{},
+		models.CourseQuizz{},
+		models.Category{},
+		models.SubCat{},
+		models.Student{},
+		models.Teacher{},
+		models.Article{},
+		models.Video{},
+		models.StudentCourse{},
+		models.Crating{},
+		models.Exam{},
+		models.Feedback{},
+		models.Question{},
+		models.ExamQuizz{},
+	)
 	if err != nil {
 		return fmt.Errorf("failed to run migrations: %v", err)
 	}
