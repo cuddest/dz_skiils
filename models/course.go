@@ -19,4 +19,5 @@ type Course struct {
 	Category    Category      `gorm:"foreignKey:CategoryID"`
 	Articles    []Article     `gorm:"foreignKey:CourseID"`
 	Videos      []Video       `gorm:"foreignKey:CourseID"`
+	Questions   []Question    `gorm:"foreignKey:CourseID"`
 }

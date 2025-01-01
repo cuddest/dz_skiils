@@ -3,14 +3,15 @@ package models
 import "golang.org/x/crypto/bcrypt"
 
 type Student struct {
-	ID       uint       `gorm:"primaryKey" json:"ID"`
-	FullName string     `json:"FullName"`
-	Username string     `gorm:"unique" json:"username"`
-	Email    string     `gorm:"unique" json:"email"`
-	Password string     `json:"Password"`
-	Picture  string     `json:"Picture"`
-	Courses  []Course   `gorm:"many2many:student_courses;"`
-	Feedback []Feedback `gorm:"foreignKey:StudentID"`
+	ID        uint       `gorm:"primaryKey" json:"ID"`
+	FullName  string     `json:"FullName"`
+	Username  string     `gorm:"unique" json:"username"`
+	Email     string     `gorm:"unique" json:"email"`
+	Password  string     `json:"Password"`
+	Picture   string     `json:"Picture"`
+	Courses   []Course   `gorm:"many2many:student_courses;"`
+	Feedback  []Feedback `gorm:"foreignKey:StudentID"`
+	Questions []Question `gorm:"foreignKey:StudentID"`
 }
 
 func (s *Student) GetPassword() string {
