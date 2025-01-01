@@ -10,8 +10,8 @@ type Student struct {
 	Password  string     `json:"Password"`
 	Picture   string     `json:"Picture"`
 	Courses   []Course   `gorm:"many2many:student_courses;"`
-	Feedback  []Feedback `gorm:"foreignKey:StudentID"`
-	Questions []Question `gorm:"foreignKey:StudentID"`
+	Feedback  []Feedback `gorm:"foreignKey:StudentID;constraint:OnDelete:CASCADE"`
+	Questions []Question `gorm:"foreignKey:StudentID;constraint:OnDelete:CASCADE"`
 }
 
 func (s *Student) GetPassword() string {
@@ -23,15 +23,16 @@ func (s *Student) SetPassword(password string) {
 }
 
 type Teacher struct {
-	ID         uint   `gorm:"primaryKey" json:"ID"`
-	FullName   string `json:"FullName"`
-	Username   string `gorm:"unique" json:"username"`
-	Email      string `gorm:"unique" json:"email"`
-	Password   string `json:"Password"`
-	Picture    string `json:"Picture"`
-	Skills     string `json:"Skills"`
-	Degrees    string `json:"Degree"`
-	Experience string `json:"Experience"`
+	ID         uint     `gorm:"primaryKey" json:"ID"`
+	FullName   string   `json:"FullName"`
+	Username   string   `gorm:"unique" json:"username"`
+	Email      string   `gorm:"unique" json:"email"`
+	Password   string   `json:"Password"`
+	Picture    string   `json:"Picture"`
+	Skills     string   `json:"Skills"`
+	Degrees    string   `json:"Degree"`
+	Experience string   `json:"Experience"`
+	Courses    []Course `gorm:"foreignKey:TeacherID;constraint:OnDelete:CASCADE"`
 }
 
 func (t *Teacher) GetPassword() string {
