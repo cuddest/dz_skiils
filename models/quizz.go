@@ -7,7 +7,7 @@ type ExamQuizz struct {
 	Option2  string `json:"Option2"`
 	Option3  string `json:"Option3"`
 	Option4  string `json:"Option4"`
-	Answer   string `json:"Answer"`
+	Answer   uint   `json:"Answer"`
 	ExamID   uint   `json:"exam_id"`
 	Exam     Exam   `gorm:"foreignKey:ExamID"`
 }

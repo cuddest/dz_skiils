@@ -71,7 +71,7 @@ func (h *ExamQuizzController) validateExamQuizz(quizz *models.ExamQuizz) error {
 	if quizz.Option1 == "" || quizz.Option2 == "" {
 		return errors.New("at least two options are required")
 	}
-	if quizz.Answer == "" {
+	if quizz.Answer == 0 {
 		return errors.New("answer is required")
 	}
 	if quizz.ExamID <= 0 {
