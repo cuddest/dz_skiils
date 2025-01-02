@@ -1,12 +1,13 @@
 package routes
 
 import (
+	"github.com/cuddest/dz-skills/controllers"
 	"github.com/cuddest/dz-skills/middlewares"
 	"github.com/gin-gonic/gin"
 )
 
 func InitRoutes(router *gin.Engine) {
-
+/*
 	CoursesGroup := router.Group("/Courses")
 
 	CoursesGroup.Use(middlewares.AuthMiddleware())
@@ -63,19 +64,22 @@ func InitRoutes(router *gin.Engine) {
 		VideoGroup.POST("/createVideo", controllers.CreateVideo)
 		VideoGroup.PUT("/updateVideo", controllers.UpdateVideo)
 		VideoGroup.DELETE("/DeleteVideo", controllers.DeleteVideo)
-	}
+	}*/
 
 	// Answer Routes
-	AnswerGroup := router.Group("/answers")
-	AnswerGroup.Use(middlewares.AuthMiddleware())
+	answerController := controllers.NewAnswerController(db)
+	answerGroup := router.Group("/api/v1/answers")
+	answerGroup.Use(middlewares.AuthMiddleware())
 	{
-		AnswerGroup.GET("/all", controllers.GetAllAnswers)
-		AnswerGroup.GET("/get", controllers.GetAnswer)
-		AnswerGroup.POST("/createAnswer", controllers.CreateAnswer)
-		AnswerGroup.PUT("/updateAnswer", controllers.UpdateAnswer)
-		AnswerGroup.DELETE("/DeleteAnswer", controllers.DeleteAnswer)
-	}
 
+		answerGroup.POST("/", answerController.CreateAnswer)                            // Create new answer
+		answerGroup.GET("/:id", answerController.GetAnswer)                             // Get specific answer
+		answerGroup.GET("/", answerController.GetAllAnswers)                            // Get all answers
+		answerGroup.PUT("/:id", answerController.UpdateAnswer)                          // Update specific answer
+		answerGroup.DELETE("/:id", answerController.DeleteAnswer)                       // Delete specific answer
+		answerGroup.GET("/question/:questionId", answerController.GetAnswersByQuestion) // Get answers by question
+	}
+/*
 	// Category Routes
 	CategoryGroup := router.Group("/categories")
 	CategoryGroup.Use(middlewares.AuthMiddleware())
@@ -176,3 +180,4 @@ func InitRoutes(router *gin.Engine) {
 	}
 
 }
+*/
