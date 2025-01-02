@@ -10,17 +10,7 @@ import (
 
 func InitRoutes(router *gin.Engine, db *sql.DB) {
 	/*
-		CoursesGroup := router.Group("/Courses")
 
-		CoursesGroup.Use(middlewares.AuthMiddleware())
-		{
-			CoursesGroup.GET("/all", controllers.GetAllPlayers)
-			CoursesGroup.GET("/get", controllers.GetPlayer)
-			CoursesGroup.POST("/createCourse", controllers.CreatePlayer)
-			CoursesGroup.PUT("/updateCourse", controllers.UpdatePlayer)
-			CoursesGroup.DELETE("/DeleteCourse", controllers.DeletePlayer)
-
-		}
 
 		// Student Routes
 		StudentGroup := router.Group("/students")
@@ -94,6 +84,19 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		CategoryGroup.POST("/createCategory", CategoryController.CreateCategory)
 		CategoryGroup.PUT("/updateCategory", CategoryController.UpdateCategory)
 		CategoryGroup.DELETE("/DeleteCategory", CategoryController.DeleteCategory)
+	}
+	// Course Routes
+	CourseController := controllers.NewCourseController(db)
+	CoursesGroup := router.Group("/Courses")
+
+	CoursesGroup.Use(middlewares.AuthMiddleware())
+	{
+		CoursesGroup.GET("/all", CourseController.GetAllCourses)
+		CoursesGroup.POST("/get", CourseController.GetCourse)
+		CoursesGroup.POST("/createCourse", CourseController.CreateCourse)
+		CoursesGroup.PUT("/updateCourse", CourseController.UpdateCourse)
+		CoursesGroup.DELETE("/DeleteCourse", CourseController.DeleteCourse)
+
 	}
 
 	/*
