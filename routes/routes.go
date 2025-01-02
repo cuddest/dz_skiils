@@ -73,11 +73,11 @@ func InitRoutes(router *gin.Engine) {
 	{
 
 		answerGroup.POST("/", answerController.CreateAnswer)                            // Create new answer
-		answerGroup.GET("/:id", answerController.GetAnswer)                             // Get specific answer
-		answerGroup.GET("/", answerController.GetAllAnswers)                            // Get all answers
-		answerGroup.PUT("/:id", answerController.UpdateAnswer)                          // Update specific answer
-		answerGroup.DELETE("/:id", answerController.DeleteAnswer)                       // Delete specific answer
-		answerGroup.GET("/question/:questionId", answerController.GetAnswersByQuestion) // Get answers by question
+		answerGroup.POST("/GetAnswer", answerController.GetAnswer)                             // Get specific answer
+		answerGroup.GET("/GetAllAnswer", answerController.GetAllAnswers)                            // Get all answers
+		answerGroup.PUT("/UpdateAnswer", answerController.UpdateAnswer)                          // Update specific answer
+		answerGroup.DELETE("/DeleteAnswer", answerController.DeleteAnswer)                       // Delete specific answer
+		answerGroup.GET("/AnswerById", answerController.GetAnswersByQuestion) // Get answers by question
 	}
 /*
 	// Category Routes
