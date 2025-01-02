@@ -98,6 +98,18 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		CoursesGroup.DELETE("/DeleteCourse", CourseController.DeleteCourse)
 
 	}
+	// coursequizz Routes
+	CourseQuizzController := controllers.NewCourseQuizzController(db)
+	CourseQuizzGroup := router.Group("/coursequizzs")
+	CourseQuizzGroup.Use(middlewares.AuthMiddleware())
+	{
+		CourseQuizzGroup.GET("/all", CourseQuizzController.GetAllQuizzes)
+		CourseQuizzGroup.POST("/get", CourseQuizzController.GetQuizz)
+		CourseQuizzGroup.POST("/createCourseQuizz", CourseQuizzController.CreateQuizz)
+		CourseQuizzGroup.PUT("/updateCourseQuizz", CourseQuizzController.UpdateQuizz)
+		CourseQuizzGroup.DELETE("/DeleteCourseQuizz", CourseQuizzController.DeleteQuizz)
+		ArticleGroup.POST("/GetQuizzesByCourse", CourseQuizzController.GetQuizzesByCourse)
+	}
 
 	/*
 
@@ -134,16 +146,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	   		ExamGroup.DELETE("/DeleteExam", controllers.DeleteExam)
 	   	}
 
-	   	// coursequizz Routes
-	   	CourseQuizzGroup := router.Group("/coursequizzs")
-	   	CourseQuizzGroup.Use(middlewares.AuthMiddleware())
-	   	{
-	   		CourseQuizzGroup.GET("/all", controllers.GetAllCourseQuizzs)
-	   		CourseQuizzGroup.GET("/get", controllers.GetCourseQuizz)
-	   		CourseQuizzGroup.POST("/createCourseQuizz", controllers.CreateCourseQuizz)
-	   		CourseQuizzGroup.PUT("/updateCourseQuizz", controllers.UpdateCourseQuizz)
-	   		CourseQuizzGroup.DELETE("/DeleteCourseQuizz", controllers.DeleteCourseQuizz)
-	   	}
+
 
 	   	// crating Routes
 	   	CratingGroup := router.Group("/cratings")
