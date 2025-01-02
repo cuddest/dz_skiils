@@ -46,16 +46,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 			TeacherGroup.DELETE("/DeleteTeacher", controllers.DeleteTeacher)
 		}
 
-		// Article Routes
-		ArticleGroup := router.Group("/articles")
-		ArticleGroup.Use(middlewares.AuthMiddleware())
-		{
-			ArticleGroup.GET("/all", controllers.GetAllArticles)
-			ArticleGroup.GET("/get", controllers.GetArticle)
-			ArticleGroup.POST("/createArticle", controllers.CreateArticle)
-			ArticleGroup.PUT("/updateArticle", controllers.UpdateArticle)
-			ArticleGroup.DELETE("/DeleteArticle", controllers.DeleteArticle)
-		}
+
 
 		// Video Routes
 		VideoGroup := router.Group("/videos")
@@ -70,7 +61,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 
 	// Answer Routes
 	answerController := controllers.NewAnswerController(db)
-	answerGroup := router.Group("/api/v1/answers")
+	answerGroup := router.Group("/answers")
 	answerGroup.Use(middlewares.AuthMiddleware())
 	{
 
@@ -81,6 +72,19 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		answerGroup.DELETE("/DeleteAnswer", answerController.DeleteAnswer)    // Delete specific answer
 		answerGroup.GET("/AnswerById", answerController.GetAnswersByQuestion) // Get answers by question
 	}
+	// Article Routes
+	articleController := controllers.NewArticleController(db)
+	ArticleGroup := router.Group("/articles")
+	ArticleGroup.Use(middlewares.AuthMiddleware())
+	{
+		ArticleGroup.GET("/all", articleController.GetAllArticles)
+		ArticleGroup.POST("/get", articleController.GetArticle)
+		ArticleGroup.POST("/GetArticlesByCourse", articleController.GetArticlesByCourse)
+		ArticleGroup.POST("/createArticle", articleController.CreateArticle)
+		ArticleGroup.PUT("/updateArticle", articleController.UpdateArticle)
+		ArticleGroup.DELETE("/DeleteArticle", articleController.DeleteArticle)
+	}
+
 	/*
 	   	// Category Routes
 	   	CategoryGroup := router.Group("/categories")
