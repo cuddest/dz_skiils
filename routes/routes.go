@@ -84,18 +84,19 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		ArticleGroup.PUT("/updateArticle", articleController.UpdateArticle)
 		ArticleGroup.DELETE("/DeleteArticle", articleController.DeleteArticle)
 	}
+	// Category Routes
+	CategoryController := controllers.NewCategoryController(db)
+	CategoryGroup := router.Group("/categories")
+	CategoryGroup.Use(middlewares.AuthMiddleware())
+	{
+		CategoryGroup.GET("/all", CategoryController.GetAllCategories)
+		CategoryGroup.GET("/get", CategoryController.GetCategory)
+		CategoryGroup.POST("/createCategory", CategoryController.CreateCategory)
+		CategoryGroup.PUT("/updateCategory", CategoryController.UpdateCategory)
+		CategoryGroup.DELETE("/DeleteCategory", CategoryController.DeleteCategory)
+	}
 
 	/*
-	   	// Category Routes
-	   	CategoryGroup := router.Group("/categories")
-	   	CategoryGroup.Use(middlewares.AuthMiddleware())
-	   	{
-	   		CategoryGroup.GET("/all", controllers.GetAllCategories)
-	   		CategoryGroup.GET("/get", controllers.GetCategory)
-	   		CategoryGroup.POST("/createCategory", controllers.CreateCategory)
-	   		CategoryGroup.PUT("/updateCategory", controllers.UpdateCategory)
-	   		CategoryGroup.DELETE("/DeleteCategory", controllers.DeleteCategory)
-	   	}
 
 	   	// SubCat Routes
 	   	SubCatGroup := router.Group("/subcats")
