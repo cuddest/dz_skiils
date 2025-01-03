@@ -55,7 +55,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	answerGroup.Use(middlewares.AuthMiddleware())
 	{
 
-		answerGroup.POST("/", answerController.CreateAnswer)                  // Create new answer
+		answerGroup.POST("/CreateAnswer", answerController.CreateAnswer)      // Create new answer
 		answerGroup.POST("/GetAnswer", answerController.GetAnswer)            // Get specific answer
 		answerGroup.GET("/GetAllAnswer", answerController.GetAllAnswers)      // Get all answers
 		answerGroup.PUT("/UpdateAnswer", answerController.UpdateAnswer)       // Update specific answer
