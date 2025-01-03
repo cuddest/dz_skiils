@@ -161,6 +161,17 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		FeedbackGroup.PUT("/updateFeedback", FeedbackQuizController.UpdateFeedback)
 		FeedbackGroup.DELETE("/DeleteFeedback", FeedbackQuizController.DeleteFeedback)
 	}
+	// Question Routes
+	QuestionkQuizController := controllers.NewQuestionController(db)
+	QuestionGroup := router.Group("/questions")
+	QuestionGroup.Use(middlewares.AuthMiddleware())
+	{
+		QuestionGroup.GET("/all", QuestionkQuizController.GetAllQuestions)
+		QuestionGroup.POST("/get", QuestionkQuizController.GetQuestion)
+		QuestionGroup.POST("/createQuestion", QuestionkQuizController.CreateQuestion)
+		QuestionGroup.PUT("/updateQuestion", QuestionkQuizController.UpdateQuestion)
+		QuestionGroup.DELETE("/DeleteQuestion", QuestionkQuizController.DeleteQuestion)
+	}
 
 	/*
 
@@ -175,16 +186,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	   		SubCatGroup.DELETE("/DeleteSubCat", controllers.DeleteSubCat)
 	   	}
 
-	   	// Question Routes
-	   	QuestionGroup := router.Group("/questions")
-	   	QuestionGroup.Use(middlewares.AuthMiddleware())
-	   	{
-	   		QuestionGroup.GET("/all", controllers.GetAllQuestions)
-	   		QuestionGroup.GET("/get", controllers.GetQuestion)
-	   		QuestionGroup.POST("/createQuestion", controllers.CreateQuestion)
-	   		QuestionGroup.PUT("/updateQuestion", controllers.UpdateQuestion)
-	   		QuestionGroup.DELETE("/DeleteQuestion", controllers.DeleteQuestion)
-	   	}
+
 
 
 
