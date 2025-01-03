@@ -38,16 +38,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 
 
 
-		// Video Routes
-		VideoGroup := router.Group("/videos")
-		VideoGroup.Use(middlewares.AuthMiddleware())
-		{
-			VideoGroup.GET("/all", controllers.GetAllVideos)
-			VideoGroup.GET("/get", controllers.GetVideo)
-			VideoGroup.POST("/createVideo", controllers.CreateVideo)
-			VideoGroup.PUT("/updateVideo", controllers.UpdateVideo)
-			VideoGroup.DELETE("/DeleteVideo", controllers.DeleteVideo)
-		}*/
+	*/
 
 	// Answer Routes
 	answerController := controllers.NewAnswerController(db)
@@ -55,12 +46,12 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	answerGroup.Use(middlewares.AuthMiddleware())
 	{
 
-		answerGroup.POST("/CreateAnswer", answerController.CreateAnswer)      // Create new answer
-		answerGroup.POST("/GetAnswer", answerController.GetAnswer)            // Get specific answer
-		answerGroup.GET("/GetAllAnswer", answerController.GetAllAnswers)      // Get all answers
-		answerGroup.PUT("/UpdateAnswer", answerController.UpdateAnswer)       // Update specific answer
-		answerGroup.DELETE("/DeleteAnswer", answerController.DeleteAnswer)    // Delete specific answer
-		answerGroup.GET("/AnswerById", answerController.GetAnswersByQuestion) // Get answers by question
+		answerGroup.POST("/CreateAnswer", answerController.CreateAnswer)
+		answerGroup.POST("/GetAnswer", answerController.GetAnswer)
+		answerGroup.GET("/GetAllAnswer", answerController.GetAllAnswers)
+		answerGroup.PUT("/UpdateAnswer", answerController.UpdateAnswer)
+		answerGroup.DELETE("/DeleteAnswer", answerController.DeleteAnswer)
+		answerGroup.POST("/AnswerById", answerController.GetAnswersByQuestion)
 	}
 	// Article Routes
 	articleController := controllers.NewArticleController(db)
@@ -80,7 +71,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	CategoryGroup.Use(middlewares.AuthMiddleware())
 	{
 		CategoryGroup.GET("/all", CategoryController.GetAllCategories)
-		CategoryGroup.GET("/get", CategoryController.GetCategory)
+		CategoryGroup.POST("/get", CategoryController.GetCategory)
 		CategoryGroup.POST("/createCategory", CategoryController.CreateCategory)
 		CategoryGroup.PUT("/updateCategory", CategoryController.UpdateCategory)
 		CategoryGroup.DELETE("/DeleteCategory", CategoryController.DeleteCategory)
@@ -130,7 +121,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	ExamGroup.Use(middlewares.AuthMiddleware())
 	{
 		ExamGroup.GET("/all", ExamController.GetAllExams)
-		ExamGroup.GET("/get", ExamController.GetExam)
+		ExamGroup.POST("/get", ExamController.GetExam)
 		ExamGroup.POST("/createExam", ExamController.CreateExam)
 		ExamGroup.PUT("/updateExam", ExamController.UpdateExam)
 		ExamGroup.DELETE("/DeleteExam", ExamController.DeleteExam)
@@ -173,39 +164,39 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		QuestionGroup.DELETE("/DeleteQuestion", QuestionkQuizController.DeleteQuestion)
 	}
 
-	/*
+	// student_course Routes
+	studentCourseController := controllers.NewStudentCourseController(db)
+	StudentCourseGroup := router.Group("/student_courses")
+	StudentCourseGroup.Use(middlewares.AuthMiddleware())
+	{
+		StudentCourseGroup.GET("/all", studentCourseController.GetAllStudentCourses)
+		StudentCourseGroup.POST("/get", studentCourseController.GetStudentCourse)
+		StudentCourseGroup.POST("/SubmitExamAnswers", studentCourseController.SubmitExamAnswers)
+		StudentCourseGroup.POST("/createStudentCourse", studentCourseController.CreateStudentCourse)
+		StudentCourseGroup.PUT("/updateStudentCourse", studentCourseController.UpdateStudentCourse)
+		StudentCourseGroup.DELETE("/DeleteStudentCourse", studentCourseController.DeleteStudentCourse)
+	}
+	// SubCat Routes
+	SubcattCourseController := controllers.NewSubCatController(db)
+	SubCatGroup := router.Group("/subcats")
+	SubCatGroup.Use(middlewares.AuthMiddleware())
+	{
+		SubCatGroup.GET("/all", SubcattCourseController.GetAllSubCats)
+		SubCatGroup.GET("/get", SubcattCourseController.GetSubCat)
+		SubCatGroup.POST("/createSubCat", SubcattCourseController.CreateSubCat)
+		SubCatGroup.PUT("/updateSubCat", SubcattCourseController.UpdateSubCat)
+		SubCatGroup.PUT("/updateSubCat", SubcattCourseController.GetSubCatsByCategory)
+		SubCatGroup.DELETE("/DeleteSubCat", SubcattCourseController.DeleteSubCat)
+	}
+	// Video Routes
+	VideoGroup := router.Group("/videos")
+	VideoGroup.Use(middlewares.AuthMiddleware())
+	{
+		VideoGroup.GET("/all", controllers.GetAllVideos)
+		VideoGroup.GET("/get", controllers.GetVideo)
+		VideoGroup.POST("/createVideo", controllers.CreateVideo)
+		VideoGroup.PUT("/updateVideo", controllers.UpdateVideo)
+		VideoGroup.DELETE("/DeleteVideo", controllers.DeleteVideo)
+	}
 
-	   	// SubCat Routes
-	   	SubCatGroup := router.Group("/subcats")
-	   	SubCatGroup.Use(middlewares.AuthMiddleware())
-	   	{
-	   		SubCatGroup.GET("/all", controllers.GetAllSubCats)
-	   		SubCatGroup.GET("/get", controllers.GetSubCat)
-	   		SubCatGroup.POST("/createSubCat", controllers.CreateSubCat)
-	   		SubCatGroup.PUT("/updateSubCat", controllers.UpdateSubCat)
-	   		SubCatGroup.DELETE("/DeleteSubCat", controllers.DeleteSubCat)
-	   	}
-
-
-
-
-
-
-
-
-
-
-	   	// student_course Routes
-	   	StudentCourseGroup := router.Group("/student_courses")
-	   	StudentCourseGroup.Use(middlewares.AuthMiddleware())
-	   	{
-	   		StudentCourseGroup.GET("/all", controllers.GetAllStudentCourses)
-	   		StudentCourseGroup.GET("/get", controllers.GetStudentCourse)
-	   		StudentCourseGroup.POST("/createStudentCourse", controllers.CreateStudentCourse)
-	   		StudentCourseGroup.PUT("/updateStudentCourse", controllers.UpdateStudentCourse)
-	   		StudentCourseGroup.DELETE("/DeleteStudentCourse", controllers.DeleteStudentCourse)
-	   	}
-
-	   }
-	*/
 }
