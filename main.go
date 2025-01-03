@@ -11,10 +11,24 @@ import (
 
 func main() {
 
-	err := config.ConnectDB()
+	db, err := config.ConnectDB()
 	if err != nil {
 		log.Fatalf("Could not start the application: %v", err)
 	}
+	defer func() {
+		sqlDB, err := db.DB()
+		if err != nil {
+			log.Printf("Failed to extract *sql.DB: %v", err)
+			return
+		}
+		sqlDB.Close()
+	}()
+
+	sqlDB, err := db.DB()
+	if err != nil {
+		log.Fatalf("Could not extract *sql.DB from *gorm.DB: %v", err)
+	}
+
 	router := gin.New()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:5173"},
@@ -23,7 +37,10 @@ func main() {
 		AllowCredentials: true,
 	}))
 
-	routes.InitRoutes(router)
+	routes.InitRoutes(router, sqlDB)
+
 	log.Println("Server running on port 8080...")
-	router.Run(":8080")
+	if err := router.Run(":8080"); err != nil {
+		log.Fatalf("Failed to run the server: %v", err)
+	}
 }
