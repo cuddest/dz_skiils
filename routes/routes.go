@@ -182,21 +182,23 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	SubCatGroup.Use(middlewares.AuthMiddleware())
 	{
 		SubCatGroup.GET("/all", SubcattCourseController.GetAllSubCats)
-		SubCatGroup.GET("/get", SubcattCourseController.GetSubCat)
+		SubCatGroup.POST("/get", SubcattCourseController.GetSubCat)
 		SubCatGroup.POST("/createSubCat", SubcattCourseController.CreateSubCat)
 		SubCatGroup.PUT("/updateSubCat", SubcattCourseController.UpdateSubCat)
 		SubCatGroup.PUT("/updateSubCat", SubcattCourseController.GetSubCatsByCategory)
 		SubCatGroup.DELETE("/DeleteSubCat", SubcattCourseController.DeleteSubCat)
 	}
 	// Video Routes
+	VideoCourseController := controllers.NewVideoController(db)
 	VideoGroup := router.Group("/videos")
 	VideoGroup.Use(middlewares.AuthMiddleware())
 	{
-		VideoGroup.GET("/all", controllers.GetAllVideos)
-		VideoGroup.GET("/get", controllers.GetVideo)
-		VideoGroup.POST("/createVideo", controllers.CreateVideo)
-		VideoGroup.PUT("/updateVideo", controllers.UpdateVideo)
-		VideoGroup.DELETE("/DeleteVideo", controllers.DeleteVideo)
+		VideoGroup.GET("/all", VideoCourseController.GetAllVideos)
+		VideoGroup.POST("/get", VideoCourseController.GetVideo)
+		VideoGroup.POST("/get", VideoCourseController.GetVideosByCourse)
+		VideoGroup.POST("/createVideo", VideoCourseController.CreateVideo)
+		VideoGroup.PUT("/updateVideo", VideoCourseController.UpdateVideo)
+		VideoGroup.DELETE("/DeleteVideo", VideoCourseController.DeleteVideo)
 	}
 
 }
