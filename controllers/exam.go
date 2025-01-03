@@ -77,7 +77,6 @@ func (h *ExamController) validateExam(exam *models.Exam) error {
 	return nil
 }
 
-// CreateExam handles the creation of a new exam
 func (h *ExamController) CreateExam(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()

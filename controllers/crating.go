@@ -18,6 +18,11 @@ const (
 		INSERT INTO cratings (course_id, student_id, rating) 
 		VALUES ($1, $2, $3)`
 
+	getAverageRatingByCourseIDQuery = `
+        SELECT COALESCE(AVG(rating), 0) as average_rating, COUNT(*) as total_ratings
+        FROM cratings 
+        WHERE course_id = $1`
+
 	getCratingByCourseIDQuery = `
 		SELECT course_id, student_id, rating 
 		FROM cratings WHERE course_id = $1`
@@ -228,4 +233,60 @@ func (h *CratingController) DeleteCrating(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Rating deleted successfully"})
+}
+func (h *CratingController) GetCourseAverageRating(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
+	courseID, err := strconv.Atoi(c.Param("course_id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid course ID format"})
+		return
+	}
+
+	var averageRating float64
+	var totalRatings int
+
+	err = h.db.QueryRowContext(ctx, getAverageRatingByCourseIDQuery, courseID).Scan(&averageRating, &totalRatings)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to calculate average rating"})
+		return
+	}
+
+	response := gin.H{
+		"course_id":      courseID,
+		"average_rating": averageRating,
+		"total_ratings":  totalRatings,
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
+func (h *CratingController) GetAllCratings(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+	defer cancel()
+
+	rows, err := h.db.QueryContext(ctx, getAllCratingsQuery)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve ratings"})
+		return
+	}
+	defer rows.Close()
+
+	var cratings []models.Crating
+	for rows.Next() {
+		var crating models.Crating
+		if err := rows.Scan(&crating.CourseID, &crating.StudentID, &crating.Rating); err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process ratings"})
+			return
+		}
+		cratings = append(cratings, crating)
+	}
+
+	if err = rows.Err(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error iterating through ratings"})
+		return
+	}
+
+	c.JSON(http.StatusOK, cratings)
 }

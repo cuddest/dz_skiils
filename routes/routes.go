@@ -110,6 +110,31 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		CourseQuizzGroup.DELETE("/DeleteCourseQuizz", CourseQuizzController.DeleteQuizz)
 		ArticleGroup.POST("/GetQuizzesByCourse", CourseQuizzController.GetQuizzesByCourse)
 	}
+	// crating Routes
+	CratingController := controllers.NewCratingController(db)
+	CratingGroup := router.Group("/cratings")
+	CratingGroup.Use(middlewares.AuthMiddleware())
+	{
+		CratingGroup.POST("/GetCratingsByCourse", CratingController.GetCratingsByCourse)
+		CratingGroup.POST("/GetCratingsByStudent", CratingController.GetCratingsByStudent)
+		CratingGroup.POST("/GetCratingByCourseAndStudent", CratingController.GetCratingsByStudent)
+		CratingGroup.POST("/createCrating", CratingController.CreateCrating)
+		CratingGroup.PUT("/updateCrating", CratingController.UpdateCrating)
+		CratingGroup.DELETE("/DeleteCrating", CratingController.DeleteCrating)
+		CratingGroup.GET("/GetAllCratings", CratingController.GetAllCratings)
+		CratingGroup.POST("/GetCourseAverageRating", CratingController.GetCourseAverageRating)
+	}
+	// Exam Routes
+	ExamController := controllers.NewCratingController(db)
+	ExamGroup := router.Group("/exams")
+	ExamGroup.Use(middlewares.AuthMiddleware())
+	{
+		ExamGroup.GET("/all", controllers.GetAllExams)
+		ExamGroup.GET("/get", controllers.GetExam)
+		ExamGroup.POST("/createExam", controllers.CreateExam)
+		ExamGroup.PUT("/updateExam", controllers.UpdateExam)
+		ExamGroup.DELETE("/DeleteExam", controllers.DeleteExam)
+	}
 
 	/*
 
@@ -135,29 +160,10 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	   		QuestionGroup.DELETE("/DeleteQuestion", controllers.DeleteQuestion)
 	   	}
 
-	   	// Exam Routes
-	   	ExamGroup := router.Group("/exams")
-	   	ExamGroup.Use(middlewares.AuthMiddleware())
-	   	{
-	   		ExamGroup.GET("/all", controllers.GetAllExams)
-	   		ExamGroup.GET("/get", controllers.GetExam)
-	   		ExamGroup.POST("/createExam", controllers.CreateExam)
-	   		ExamGroup.PUT("/updateExam", controllers.UpdateExam)
-	   		ExamGroup.DELETE("/DeleteExam", controllers.DeleteExam)
-	   	}
 
 
 
-	   	// crating Routes
-	   	CratingGroup := router.Group("/cratings")
-	   	CratingGroup.Use(middlewares.AuthMiddleware())
-	   	{
-	   		CratingGroup.GET("/all", controllers.GetAllCratings)
-	   		CratingGroup.GET("/get", controllers.GetCrating)
-	   		CratingGroup.POST("/createCrating", controllers.CreateCrating)
-	   		CratingGroup.PUT("/updateCrating", controllers.UpdateCrating)
-	   		CratingGroup.DELETE("/DeleteCrating", controllers.DeleteCrating)
-	   	}
+
 
 	   	// feedback Routes
 	   	FeedbackGroup := router.Group("/feedbacks")
