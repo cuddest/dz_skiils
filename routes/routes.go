@@ -125,15 +125,29 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		CratingGroup.POST("/GetCourseAverageRating", CratingController.GetCourseAverageRating)
 	}
 	// Exam Routes
-	ExamController := controllers.NewCratingController(db)
+	ExamController := controllers.NewExamController(db)
 	ExamGroup := router.Group("/exams")
 	ExamGroup.Use(middlewares.AuthMiddleware())
 	{
-		ExamGroup.GET("/all", controllers.GetAllExams)
-		ExamGroup.GET("/get", controllers.GetExam)
-		ExamGroup.POST("/createExam", controllers.CreateExam)
-		ExamGroup.PUT("/updateExam", controllers.UpdateExam)
-		ExamGroup.DELETE("/DeleteExam", controllers.DeleteExam)
+		ExamGroup.GET("/all", ExamController.GetAllExams)
+		ExamGroup.GET("/get", ExamController.GetExam)
+		ExamGroup.POST("/createExam", ExamController.CreateExam)
+		ExamGroup.PUT("/updateExam", ExamController.UpdateExam)
+		ExamGroup.DELETE("/DeleteExam", ExamController.DeleteExam)
+		ExamGroup.POST("/GetExamsByCourse", ExamController.GetExamsByCourse)
+	}
+
+	// ExamQuiz Routes
+	ExamQuizController := controllers.NewExamQuizzController(db)
+	ExamQuizGroup := router.Group("/examquizzes")
+	ExamQuizGroup.Use(middlewares.AuthMiddleware())
+	{
+		ExamQuizGroup.GET("/all", ExamQuizController.GetAllExamQuizzes)
+		ExamQuizGroup.POST("/get", ExamQuizController.GetExamQuizz)
+		ExamQuizGroup.POST("/GetExamQuizzesByExam", ExamQuizController.GetExamQuizzesByExam)
+		ExamQuizGroup.POST("/createExamQuiz", ExamQuizController.CreateExamQuizz)
+		ExamQuizGroup.PUT("/updateExamQuiz", ExamQuizController.UpdateExamQuizz)
+		ExamQuizGroup.DELETE("/DeleteExamQuiz", ExamQuizController.DeleteExamQuizz)
 	}
 
 	/*
@@ -176,16 +190,6 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	   		FeedbackGroup.DELETE("/DeleteFeedback", controllers.DeleteFeedback)
 	   	}
 
-	   	// ExamQuiz Routes
-	   	ExamQuizGroup := router.Group("/examquizzes")
-	   	ExamQuizGroup.Use(middlewares.AuthMiddleware())
-	   	{
-	   		ExamQuizGroup.GET("/all", controllers.GetAllExamQuizzes)
-	   		ExamQuizGroup.GET("/get", controllers.GetExamQuiz)
-	   		ExamQuizGroup.POST("/createExamQuiz", controllers.CreateExamQuiz)
-	   		ExamQuizGroup.PUT("/updateExamQuiz", controllers.UpdateExamQuiz)
-	   		ExamQuizGroup.DELETE("/DeleteExamQuiz", controllers.DeleteExamQuiz)
-	   	}
 
 	   	// student_course Routes
 	   	StudentCourseGroup := router.Group("/student_courses")
