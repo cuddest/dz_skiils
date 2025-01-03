@@ -11,6 +11,8 @@ import (
 	"gorm.io/gorm"
 )
 
+var DB *gorm.DB
+
 func ConnectDB() (*gorm.DB, error) {
 	err := godotenv.Load()
 	if err != nil {
@@ -32,7 +34,7 @@ func ConnectDB() (*gorm.DB, error) {
 		return nil, fmt.Errorf("failed to run migrations: %v", err)
 	}
 	log.Println("Database Migration Completed!")
-
+	DB = db
 	return db, nil
 }
 

@@ -9,36 +9,6 @@ import (
 )
 
 func InitRoutes(router *gin.Engine, db *sql.DB) {
-	/*
-
-
-		// Student Routes
-		StudentGroup := router.Group("/students")
-		StudentGroup.POST("/login", controllers.GenerateToken)
-		StudentGroup.POST("/CreateUser", controllers.CreateUser)
-		StudentGroup.Use(middlewares.AuthMiddleware())
-		{
-			StudentGroup.GET("/all", controllers.GetAllUsers)
-			StudentGroup.POST("/GetUser", controllers.GetUser)
-			StudentGroup.PUT("/UpdateUser", controllers.UpdateUser)
-			StudentGroup.DELETE("/DeleteUser", controllers.DeleteUser)
-		}
-
-		// Teacher Routes
-		TeacherGroup := router.Group("/teachers")
-		TeacherGroup.POST("/login", controllers.GenerateToken)
-		TeacherGroup.POST("/CreateTeacher", controllers.CreateTeacher)
-		TeacherGroup.Use(middlewares.AuthMiddleware())
-		{
-			TeacherGroup.GET("/all", controllers.GetAllTeachers)
-			TeacherGroup.POST("/GetTeacher", controllers.GetTeacher)
-			TeacherGroup.PUT("/UpdateTeacher", controllers.UpdateTeacher)
-			TeacherGroup.DELETE("/DeleteTeacher", controllers.DeleteTeacher)
-		}
-
-
-
-	*/
 
 	// Answer Routes
 	answerController := controllers.NewAnswerController(db)
@@ -199,6 +169,30 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		VideoGroup.POST("/createVideo", VideoCourseController.CreateVideo)
 		VideoGroup.PUT("/updateVideo", VideoCourseController.UpdateVideo)
 		VideoGroup.DELETE("/DeleteVideo", VideoCourseController.DeleteVideo)
+	}
+	// Student Routes
+	StudentCourseController := controllers.NewStudentController(db)
+	StudentGroup := router.Group("/students")
+	StudentGroup.POST("/login", controllers.GenerateToken)
+	StudentGroup.POST("/CreateStudent", StudentCourseController.CreateStudent)
+	StudentGroup.Use(middlewares.AuthMiddleware())
+	{
+		StudentGroup.GET("/all", StudentCourseController.GetAllStudents)
+		StudentGroup.POST("/GetStudent", StudentCourseController.GetStudent)
+		StudentGroup.PUT("/UpdateUser", StudentCourseController.UpdateStudent)
+		StudentGroup.DELETE("/DeleteUser", StudentCourseController.DeleteStudent)
+	}
+	// Teacher Routes
+	TeacherCourseController := controllers.NewTeacherController(db)
+	TeacherGroup := router.Group("/teachers")
+	TeacherGroup.POST("/login", controllers.GenerateToken)
+	TeacherGroup.POST("/CreateTeacher", TeacherCourseController.CreateTeacher)
+	TeacherGroup.Use(middlewares.AuthMiddleware())
+	{
+		TeacherGroup.GET("/all", TeacherCourseController.GetAllTeachers)
+		TeacherGroup.POST("/GetTeacher", TeacherCourseController.GetTeacher)
+		TeacherGroup.PUT("/UpdateTeacher", TeacherCourseController.UpdateTeacher)
+		TeacherGroup.DELETE("/DeleteTeacher", TeacherCourseController.DeleteTeacher)
 	}
 
 }

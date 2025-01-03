@@ -12,7 +12,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SQL queries for StudentCourse operations
 const (
 	createStudentCourseQuery = `
 		INSERT INTO student_courses (student_id, course_id, grade, enrollment, certificate, issued) 
@@ -26,11 +25,6 @@ const (
 	getAllStudentCoursesQuery = `
 		SELECT student_id, course_id, grade, enrollment, certificate, issued 
 		FROM student_courses`
-
-	getStudentCoursesForStudentQuery = `
-		SELECT student_id, course_id, grade, enrollment, certificate, issued 
-		FROM student_courses 
-		WHERE student_id = $1`
 
 	updateStudentCourseQuery = `
 		UPDATE student_courses 
