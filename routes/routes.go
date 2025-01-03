@@ -149,6 +149,18 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		ExamQuizGroup.PUT("/updateExamQuiz", ExamQuizController.UpdateExamQuizz)
 		ExamQuizGroup.DELETE("/DeleteExamQuiz", ExamQuizController.DeleteExamQuizz)
 	}
+	// feedback Routes
+	FeedbackQuizController := controllers.NewFeedbackController(db)
+	FeedbackGroup := router.Group("/feedbacks")
+	FeedbackGroup.Use(middlewares.AuthMiddleware())
+	{
+		FeedbackGroup.GET("/all", FeedbackQuizController.GetAllFeedbacks)
+		FeedbackGroup.POST("/get", FeedbackQuizController.GetFeedback)
+		FeedbackGroup.POST("/getFeedbacksByStudent", FeedbackQuizController.GetFeedbacksByStudent)
+		FeedbackGroup.POST("/createFeedback", FeedbackQuizController.CreateFeedback)
+		FeedbackGroup.PUT("/updateFeedback", FeedbackQuizController.UpdateFeedback)
+		FeedbackGroup.DELETE("/DeleteFeedback", FeedbackQuizController.DeleteFeedback)
+	}
 
 	/*
 
@@ -179,16 +191,6 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 
 
 
-	   	// feedback Routes
-	   	FeedbackGroup := router.Group("/feedbacks")
-	   	FeedbackGroup.Use(middlewares.AuthMiddleware())
-	   	{
-	   		FeedbackGroup.GET("/all", controllers.GetAllFeedbacks)
-	   		FeedbackGroup.GET("/get", controllers.GetFeedback)
-	   		FeedbackGroup.POST("/createFeedback", controllers.CreateFeedback)
-	   		FeedbackGroup.PUT("/updateFeedback", controllers.UpdateFeedback)
-	   		FeedbackGroup.DELETE("/DeleteFeedback", controllers.DeleteFeedback)
-	   	}
 
 
 	   	// student_course Routes
