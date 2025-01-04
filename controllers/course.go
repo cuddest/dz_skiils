@@ -18,22 +18,22 @@ const (
 		INSERT INTO courses (name, description, pricing, duration, image, language, level, teacher_id, category_id) 
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
 		RETURNING id`
-	
+
 	getCourseQuery = `
 		SELECT id, name, description, pricing, duration, image, language, level, teacher_id, category_id 
 		FROM courses 
 		WHERE id = $1`
-	
+
 	getAllCoursesQuery = `
 		SELECT id, name, description, pricing, duration, image, language, level, teacher_id, category_id 
 		FROM courses`
-	
+
 	updateCourseQuery = `
 		UPDATE courses 
 		SET name = $1, description = $2, pricing = $3, duration = $4, 
 			image = $5, language = $6, level = $7, teacher_id = $8, category_id = $9 
 		WHERE id = $10`
-	
+
 	deleteCourseQuery = `DELETE FROM courses WHERE id = $1`
 )
 
@@ -49,9 +49,6 @@ func NewCourseController(db *sql.DB) *CourseController {
 func (h *CourseController) validateCourse(course *models.Course) error {
 	if course.Name == "" {
 		return errors.New("course name is required")
-	}
-	if course.Duration <= 0 {
-		return errors.New("course duration must be positive")
 	}
 	if course.TeacherID <= 0 {
 		return errors.New("valid teacher ID is required")
