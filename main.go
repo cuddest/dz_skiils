@@ -20,7 +20,7 @@ import (
 // @license.url    https://opensource.org/licenses/MIT
 
 // @host           https://dzskiils-production.up.railway.app/
-// @BasePath       /
+// @BasePath
 
 func main() {
 	db, err := config.ConnectDB()
