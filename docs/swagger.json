@@ -1,7 +1,19 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "API for managing teachers, students, courses, and more in the DZ Skills Online Teaching platform.",
+        "title": "DZ Skills API",
+        "contact": {
+            "name": "Support Team",
+            "email": "a_touati@estin.dz"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0"
     },
+    "host": "https://dzskiils-production.up.railway.app/",
+    "basePath": "/",
     "paths": {}
 }

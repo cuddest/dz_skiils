@@ -1,4 +1,15 @@
+basePath: /
+host: https://dzskiils-production.up.railway.app/
 info:
-  contact: {}
+  contact:
+    email: a_touati@estin.dz
+    name: Support Team
+  description: API for managing teachers, students, courses, and more in the DZ Skills
+    Online Teaching platform.
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  title: DZ Skills API
+  version: "1.0"
 paths: {}
 swagger: "2.0"
