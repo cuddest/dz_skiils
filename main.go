@@ -4,17 +4,30 @@ import (
 	"log"
 
 	"github.com/cuddest/dz-skills/config"
+	_ "github.com/cuddest/dz-skills/docs"
 	"github.com/cuddest/dz-skills/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func main() {
+// @title          DZ Skills API
+// @version        1.0
+// @description    API for managing teachers, students, courses, and more in the DZ Skills Online Teaching platform.
+// @contact.name   Support Team
+// @contact.email  a_touati@estin.dz
 
+// @license.name   MIT
+// @license.url    https://opensource.org/licenses/MIT
+
+// @host           https://dzskiils-production.up.railway.app/
+// @BasePath       /
+
+func main() {
 	db, err := config.ConnectDB()
 	if err != nil {
 		log.Fatalf("Could not start the application: %v", err)
 	}
+	/* because if my dumb ass main crashes, IT IS ME WHO HAVE TO CLEAN THE CONNECTION TRASH LEFT HERE */
 	defer func() {
 		sqlDB, err := db.DB()
 		if err != nil {

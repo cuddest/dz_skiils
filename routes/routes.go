@@ -6,10 +6,13 @@ import (
 	"github.com/cuddest/dz-skills/controllers"
 	"github.com/cuddest/dz-skills/middlewares"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func InitRoutes(router *gin.Engine, db *sql.DB) {
-
+	// swagger docs route
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// Answer Routes
 	answerController := controllers.NewAnswerController(db)
 	answerGroup := router.Group("/answers")
@@ -155,7 +158,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		SubCatGroup.POST("/get", SubcattCourseController.GetSubCat)
 		SubCatGroup.POST("/createSubCat", SubcattCourseController.CreateSubCat)
 		SubCatGroup.PUT("/updateSubCat", SubcattCourseController.UpdateSubCat)
-		SubCatGroup.PUT("/updateSubCat", SubcattCourseController.GetSubCatsByCategory)
+		SubCatGroup.POST("/GetSubCatsByCategory", SubcattCourseController.GetSubCatsByCategory)
 		SubCatGroup.DELETE("/DeleteSubCat", SubcattCourseController.DeleteSubCat)
 	}
 	// Video Routes
