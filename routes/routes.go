@@ -13,6 +13,12 @@ import (
 func InitRoutes(router *gin.Engine, db *sql.DB) {
 	// swagger docs route
 	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	//base routes
+	router.GET("/", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Welcome to the Dz Skills API, go to https://dzskiils-production.up.railway.app/docs/index.html#/ for documentation, good to see you :D",
+		})
+	})
 	// Answer Routes
 	answerController := controllers.NewAnswerController(db)
 	answerGroup := router.Group("/answers")
