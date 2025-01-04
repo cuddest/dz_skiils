@@ -168,7 +168,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	{
 		VideoGroup.GET("/all", VideoCourseController.GetAllVideos)
 		VideoGroup.POST("/get", VideoCourseController.GetVideo)
-		VideoGroup.POST("/get", VideoCourseController.GetVideosByCourse)
+		VideoGroup.POST("/GetVideosByCourse", VideoCourseController.GetVideosByCourse)
 		VideoGroup.POST("/createVideo", VideoCourseController.CreateVideo)
 		VideoGroup.PUT("/updateVideo", VideoCourseController.UpdateVideo)
 		VideoGroup.DELETE("/DeleteVideo", VideoCourseController.DeleteVideo)
