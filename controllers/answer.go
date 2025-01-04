@@ -39,10 +39,6 @@ const (
 		DELETE FROM answers WHERE id = $1`
 )
 
-type AnswerController struct {
-	db *sql.DB
-}
-
 func NewAnswerController(db *sql.DB) *AnswerController {
 	return &AnswerController{db: db}
 }
@@ -56,6 +52,26 @@ func (h *AnswerController) validateAnswer(answer *models.Answer) error {
 	}
 	return nil
 }
+
+// AnswerController handles operations on answers
+// @title Answer API
+// @description CRUD operations for managing answers
+type AnswerController struct {
+	db *sql.DB
+}
+
+// CreateAnswer godoc
+// @Summary Create a new answer
+// @Description Create a new answer for a specific question
+// @Tags answers
+// @Accept json
+// @Produce json
+// @Param answer body models.Answer true "Answer object to be created"
+// @Success 201 {object} models.Answer
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /answers/CreateAnswer [post]
 
 // CreateAnswer handles the creation of a new answer
 func (h *AnswerController) CreateAnswer(c *gin.Context) {
@@ -95,6 +111,18 @@ func (h *AnswerController) CreateAnswer(c *gin.Context) {
 	c.JSON(http.StatusCreated, answer)
 }
 
+// GetAnswer godoc
+// @Summary Get a specific answer
+// @Description Get an answer by its ID
+// @Tags answers
+// @Accept json
+// @Produce json
+// @Param id path int true "Answer ID"
+// @Success 200 {object} models.Answer
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /answers/GetAnswer [post]
 // GetAnswer retrieves a specific answer by ID
 func (h *AnswerController) GetAnswer(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -120,6 +148,15 @@ func (h *AnswerController) GetAnswer(c *gin.Context) {
 	c.JSON(http.StatusOK, answer)
 }
 
+// GetAllAnswers godoc
+// @Summary Get all answers
+// @Description Retrieve all answers from the database
+// @Tags answers
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Answer
+// @Failure 500 {object} gin.H
+// @Router /answers/GetAllAnswer [get]
 // GetAllAnswers retrieves all answers
 func (h *AnswerController) GetAllAnswers(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -150,6 +187,18 @@ func (h *AnswerController) GetAllAnswers(c *gin.Context) {
 	c.JSON(http.StatusOK, answers)
 }
 
+// GetAnswersByQuestion godoc
+// @Summary Get answers by question
+// @Description Get all answers for a specific question
+// @Tags answers
+// @Accept json
+// @Produce json
+// @Param questionId path int true "Question ID"
+// @Success 200 {array} models.Answer
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /questions/GetAnswersByQuestion [post]
 // GetAnswersByQuestion retrieves all answers for a specific question
 func (h *AnswerController) GetAnswersByQuestion(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -198,6 +247,18 @@ func (h *AnswerController) GetAnswersByQuestion(c *gin.Context) {
 	c.JSON(http.StatusOK, answers)
 }
 
+// @Summary Update an answer
+// @Description Update an existing answer by its ID
+// @Tags answers
+// @Accept json
+// @Produce json
+// @Param id path int true "Answer ID"
+// @Param answer body models.Answer true "Updated answer object"
+// @Success 200 {object} models.Answer
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /answers/UpdateAnswer [put]
 // UpdateAnswer updates an existing answer
 func (h *AnswerController) UpdateAnswer(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -242,6 +303,18 @@ func (h *AnswerController) UpdateAnswer(c *gin.Context) {
 	c.JSON(http.StatusOK, answer)
 }
 
+// DeleteAnswer godoc
+// @Summary Delete an answer
+// @Description Delete an answer by its ID
+// @Tags answers
+// @Accept json
+// @Produce json
+// @Param id path int true "Answer ID"
+// @Success 200 {object} gin.H
+// @Failure 400 {object} gin.H
+// @Failure 404 {object} gin.H
+// @Failure 500 {object} gin.H
+// @Router /answers/DeleteAnswer [delete]
 // DeleteAnswer deletes an answer by ID
 func (h *AnswerController) DeleteAnswer(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)

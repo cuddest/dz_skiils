@@ -24,7 +24,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		answerGroup.GET("/GetAllAnswer", answerController.GetAllAnswers)
 		answerGroup.PUT("/UpdateAnswer", answerController.UpdateAnswer)
 		answerGroup.DELETE("/DeleteAnswer", answerController.DeleteAnswer)
-		answerGroup.POST("/AnswerById", answerController.GetAnswersByQuestion)
+		answerGroup.POST("/GetAnswersByQuestion", answerController.GetAnswersByQuestion)
 	}
 	// Article Routes
 	articleController := controllers.NewArticleController(db)
