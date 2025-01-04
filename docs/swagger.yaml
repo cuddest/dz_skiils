@@ -1,4 +1,30 @@
-basePath: /
+definitions:
+  models.Answer:
+    properties:
+      Answer:
+        type: string
+      ID:
+        type: integer
+      question:
+        $ref: '#/definitions/models.Question'
+      question_id:
+        type: integer
+    type: object
+  models.Question:
+    properties:
+      answers:
+        items:
+          $ref: '#/definitions/models.Answer'
+        type: array
+      course_id:
+        type: integer
+      id:
+        type: integer
+      rating:
+        type: string
+      student_id:
+        type: integer
+    type: object
 host: https://dzskiils-production.up.railway.app/
 info:
   contact:
@@ -11,5 +37,179 @@ info:
     url: https://opensource.org/licenses/MIT
   title: DZ Skills API
   version: "1.0"
-paths: {}
+paths:
+  /answers/DeleteAnswer:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an answer by its ID
+      parameters:
+      - description: Answer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Answer'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete an answer
+      tags:
+      - answers
+  /answers/GetAllAnswer:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all answers from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Answer'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all answers
+      tags:
+      - answers
+  /answers/GetAnswer:
+    post:
+      consumes:
+      - application/json
+      description: Get an answer by its ID
+      parameters:
+      - description: Answer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Answer'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a specific answer
+      tags:
+      - answers
+  /answers/UpdateAnswer:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing answer by its ID
+      parameters:
+      - description: Answer ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated answer object
+        in: body
+        name: answer
+        required: true
+        schema:
+          $ref: '#/definitions/models.Answer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Answer'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update an answer
+      tags:
+      - answers
+  /questions/GetAnswersByQuestion:
+    post:
+      consumes:
+      - application/json
+      description: Get all answers for a specific question
+      parameters:
+      - description: Question ID
+        in: path
+        name: questionId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Answer'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get answers by question
+      tags:
+      - answers
 swagger: "2.0"

@@ -68,9 +68,9 @@ type AnswerController struct {
 // @Produce json
 // @Param answer body models.Answer true "Answer object to be created"
 // @Success 201 {object} models.Answer
-// @Failure 400 {object} gin.H
-// @Failure 404 {object} gin.H
-// @Failure 500 {object} gin.H
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
 // @Router /answers/CreateAnswer [post]
 
 // CreateAnswer handles the creation of a new answer
@@ -119,9 +119,9 @@ func (h *AnswerController) CreateAnswer(c *gin.Context) {
 // @Produce json
 // @Param id path int true "Answer ID"
 // @Success 200 {object} models.Answer
-// @Failure 400 {object} gin.H
-// @Failure 404 {object} gin.H
-// @Failure 500 {object} gin.H
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
 // @Router /answers/GetAnswer [post]
 // GetAnswer retrieves a specific answer by ID
 func (h *AnswerController) GetAnswer(c *gin.Context) {
@@ -155,7 +155,7 @@ func (h *AnswerController) GetAnswer(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {array} models.Answer
-// @Failure 500 {object} gin.H
+// @Failure 500 {object} map[string]interface{}
 // @Router /answers/GetAllAnswer [get]
 // GetAllAnswers retrieves all answers
 func (h *AnswerController) GetAllAnswers(c *gin.Context) {
@@ -195,9 +195,9 @@ func (h *AnswerController) GetAllAnswers(c *gin.Context) {
 // @Produce json
 // @Param questionId path int true "Question ID"
 // @Success 200 {array} models.Answer
-// @Failure 400 {object} gin.H
-// @Failure 404 {object} gin.H
-// @Failure 500 {object} gin.H
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
 // @Router /questions/GetAnswersByQuestion [post]
 // GetAnswersByQuestion retrieves all answers for a specific question
 func (h *AnswerController) GetAnswersByQuestion(c *gin.Context) {
@@ -255,9 +255,9 @@ func (h *AnswerController) GetAnswersByQuestion(c *gin.Context) {
 // @Param id path int true "Answer ID"
 // @Param answer body models.Answer true "Updated answer object"
 // @Success 200 {object} models.Answer
-// @Failure 400 {object} gin.H
-// @Failure 404 {object} gin.H
-// @Failure 500 {object} gin.H
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
 // @Router /answers/UpdateAnswer [put]
 // UpdateAnswer updates an existing answer
 func (h *AnswerController) UpdateAnswer(c *gin.Context) {
@@ -310,10 +310,10 @@ func (h *AnswerController) UpdateAnswer(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Answer ID"
-// @Success 200 {object} gin.H
-// @Failure 400 {object} gin.H
-// @Failure 404 {object} gin.H
-// @Failure 500 {object} gin.H
+// @Success 200 {object} models.Answer
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
 // @Router /answers/DeleteAnswer [delete]
 // DeleteAnswer deletes an answer by ID
 func (h *AnswerController) DeleteAnswer(c *gin.Context) {
