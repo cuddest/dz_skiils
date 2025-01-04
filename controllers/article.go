@@ -35,6 +35,9 @@ const (
 		DELETE FROM articles WHERE id = $1`
 )
 
+// ArticleController handles operations on articles
+// @title Article API
+// @description CRUD operations for managing articles
 type ArticleController struct {
 	db *sql.DB
 }
@@ -56,6 +59,18 @@ func (h *ArticleController) validateArticle(article *models.Article) error {
 	return nil
 }
 
+// CreateArticle godoc
+// @Summary Create a new article
+// @Description Create a new article for a specific course
+// @Tags articles
+// @Accept json
+// @Produce json
+// @Param article body models.Article true "Article object to be created"
+// @Success 201 {object} models.Article
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /articles/createArticle [post]
 func (h *ArticleController) CreateArticle(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -93,6 +108,18 @@ func (h *ArticleController) CreateArticle(c *gin.Context) {
 	c.JSON(http.StatusCreated, article)
 }
 
+// GetArticle godoc
+// @Summary Get a specific article
+// @Description Get an article by its ID
+// @Tags articles
+// @Accept json
+// @Produce json
+// @Param id path int true "Article ID"
+// @Success 200 {object} models.Article
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /articles/get [post]
 func (h *ArticleController) GetArticle(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -121,6 +148,15 @@ func (h *ArticleController) GetArticle(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
+// GetAllArticles godoc
+// @Summary Get all articles
+// @Description Retrieve all articles from the database
+// @Tags articles
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Article
+// @Failure 500 {object} map[string]interface{}
+// @Router /articles/all [get]
 func (h *ArticleController) GetAllArticles(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -148,6 +184,18 @@ func (h *ArticleController) GetAllArticles(c *gin.Context) {
 	c.JSON(http.StatusOK, articles)
 }
 
+// GetArticlesByCourse godoc
+// @Summary Get articles by course
+// @Description Get all articles for a specific course
+// @Tags articles
+// @Accept json
+// @Produce json
+// @Param courseId path int true "Course ID"
+// @Success 200 {array} models.Article
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /articles/GetArticlesByCourse [post]
 func (h *ArticleController) GetArticlesByCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -181,6 +229,19 @@ func (h *ArticleController) GetArticlesByCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, articles)
 }
 
+// UpdateArticle godoc
+// @Summary Update an article
+// @Description Update an existing article by its ID
+// @Tags articles
+// @Accept json
+// @Produce json
+// @Param id path int true "Article ID"
+// @Param article body models.Article true "Updated article object"
+// @Success 200 {object} models.Article
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /articles/updateArticle[put]
 func (h *ArticleController) UpdateArticle(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -224,6 +285,18 @@ func (h *ArticleController) UpdateArticle(c *gin.Context) {
 	c.JSON(http.StatusOK, article)
 }
 
+// DeleteArticle godoc
+// @Summary Delete an article
+// @Description Delete an article by its ID
+// @Tags articles
+// @Accept json
+// @Produce json
+// @Param id path int true "Article ID"
+// @Success 200 {object} gin.H
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /articles/DeleteArticle [delete]
 func (h *ArticleController) DeleteArticle(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
