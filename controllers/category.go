@@ -54,6 +54,9 @@ const (
 		DELETE FROM categories WHERE id = $1`
 )
 
+// CategoryController handles operations on categories
+// @title Category API
+// @description CRUD operations for managing categories
 type CategoryController struct {
 	db *sql.DB
 }
@@ -71,6 +74,18 @@ func (h *CategoryController) validateCategory(category *models.Category) error {
 	return nil
 }
 
+// CreateCategory godoc
+// @Summary Create a new category
+// @Description Create a new category
+// @Tags categories
+// @Accept json
+// @Produce json
+// @Param category body models.Category true "Category object to be created"
+// @Success 201 {object} models.Category
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /categories/createCategory [post]
 func (h *CategoryController) CreateCategory(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -95,6 +110,18 @@ func (h *CategoryController) CreateCategory(c *gin.Context) {
 	c.JSON(http.StatusCreated, category)
 }
 
+// GetCategory godoc
+// @Summary Get a specific category
+// @Description Get a category by its ID, including its subcategories
+// @Tags categories
+// @Accept json
+// @Produce json
+// @Param id path int true "Category ID"
+// @Success 200 {object} models.Category
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /categories/get [post]
 func (h *CategoryController) GetCategory(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -123,6 +150,15 @@ func (h *CategoryController) GetCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, category)
 }
 
+// GetAllCategories godoc
+// @Summary Get all categories
+// @Description Retrieve all categories with their subcategories
+// @Tags categories
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Category
+// @Failure 500 {object} map[string]interface{}
+// @Router /categories/all [get]
 func (h *CategoryController) GetAllCategories(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -153,6 +189,19 @@ func (h *CategoryController) GetAllCategories(c *gin.Context) {
 	c.JSON(http.StatusOK, categories)
 }
 
+// UpdateCategory godoc
+// @Summary Update a category
+// @Description Update an existing category by its ID
+// @Tags categories
+// @Accept json
+// @Produce json
+// @Param id path int true "Category ID"
+// @Param category body models.Category true "Updated category object"
+// @Success 200 {object} models.Category
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /categories/updateCategory [put]
 func (h *CategoryController) UpdateCategory(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -194,6 +243,18 @@ func (h *CategoryController) UpdateCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, category)
 }
 
+// DeleteCategory godoc
+// @Summary Delete a category
+// @Description Delete a category by its ID
+// @Tags categories
+// @Accept json
+// @Produce json
+// @Param id path int true "Category ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /categories/DeleteCategory [delete]
 func (h *CategoryController) DeleteCategory(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()

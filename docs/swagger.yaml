@@ -10,6 +10,130 @@ definitions:
       question_id:
         type: integer
     type: object
+  models.Article:
+    properties:
+      Description:
+        type: string
+      ID:
+        type: integer
+      Link:
+        type: string
+      Title:
+        type: string
+      course:
+        $ref: '#/definitions/models.Course'
+      course_id:
+        type: integer
+    type: object
+  models.Category:
+    properties:
+      ID:
+        type: integer
+      Name:
+        type: string
+      courses:
+        items:
+          $ref: '#/definitions/models.Course'
+        type: array
+      subCats:
+        items:
+          $ref: '#/definitions/models.SubCat'
+        type: array
+    type: object
+  models.Course:
+    properties:
+      Description:
+        type: string
+      Duration:
+        type: string
+      ID:
+        type: integer
+      Image:
+        type: string
+      Language:
+        type: string
+      Level:
+        type: string
+      Name:
+        type: string
+      Pricing:
+        type: string
+      articles:
+        items:
+          $ref: '#/definitions/models.Article'
+        type: array
+      category:
+        $ref: '#/definitions/models.Category'
+      category_id:
+        type: integer
+      courseQuizz:
+        items:
+          $ref: '#/definitions/models.CourseQuizz'
+        type: array
+      crating:
+        items:
+          $ref: '#/definitions/models.Crating'
+        type: array
+      questions:
+        items:
+          $ref: '#/definitions/models.Question'
+        type: array
+      student:
+        items:
+          $ref: '#/definitions/models.Student'
+        type: array
+      teacher:
+        $ref: '#/definitions/models.Teacher'
+      teacher_id:
+        type: integer
+      videos:
+        items:
+          $ref: '#/definitions/models.Video'
+        type: array
+    type: object
+  models.CourseQuizz:
+    properties:
+      Answer:
+        type: string
+      ID:
+        type: integer
+      Option1:
+        type: string
+      Option2:
+        type: string
+      Option3:
+        type: string
+      Option4:
+        type: string
+      Question:
+        type: string
+      course:
+        $ref: '#/definitions/models.Course'
+      exam_id:
+        type: integer
+    type: object
+  models.Crating:
+    properties:
+      course_id:
+        type: integer
+      rating:
+        type: number
+      student_id:
+        type: integer
+    type: object
+  models.Feedback:
+    properties:
+      Description:
+        type: string
+      ID:
+        type: integer
+      Review:
+        type: integer
+      student:
+        $ref: '#/definitions/models.Student'
+      student_id:
+        type: integer
+    type: object
   models.Question:
     properties:
       answers:
@@ -23,6 +147,82 @@ definitions:
       rating:
         type: string
       student_id:
+        type: integer
+    type: object
+  models.Student:
+    properties:
+      FullName:
+        type: string
+      ID:
+        type: integer
+      Password:
+        type: string
+      Picture:
+        type: string
+      courses:
+        items:
+          $ref: '#/definitions/models.Course'
+        type: array
+      email:
+        type: string
+      feedback:
+        items:
+          $ref: '#/definitions/models.Feedback'
+        type: array
+      questions:
+        items:
+          $ref: '#/definitions/models.Question'
+        type: array
+      username:
+        type: string
+    type: object
+  models.SubCat:
+    properties:
+      ID:
+        type: integer
+      Name:
+        type: string
+      category:
+        $ref: '#/definitions/models.Category'
+      category_id:
+        type: integer
+    type: object
+  models.Teacher:
+    properties:
+      Degree:
+        type: string
+      Experience:
+        type: string
+      FullName:
+        type: string
+      ID:
+        type: integer
+      Password:
+        type: string
+      Picture:
+        type: string
+      Skills:
+        type: string
+      courses:
+        items:
+          $ref: '#/definitions/models.Course'
+        type: array
+      email:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Video:
+    properties:
+      ID:
+        type: integer
+      Link:
+        type: string
+      Title:
+        type: string
+      course:
+        $ref: '#/definitions/models.Course'
+      course_id:
         type: integer
     type: object
 host: https://dzskiils-production.up.railway.app/
@@ -174,6 +374,392 @@ paths:
       summary: Update an answer
       tags:
       - answers
+  /articles/DeleteArticle:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an article by its ID
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete an article
+      tags:
+      - articles
+  /articles/GetArticlesByCourse:
+    post:
+      consumes:
+      - application/json
+      description: Get all articles for a specific course
+      parameters:
+      - description: Course ID
+        in: path
+        name: courseId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Article'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get articles by course
+      tags:
+      - articles
+  /articles/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all articles from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Article'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all articles
+      tags:
+      - articles
+  /articles/createArticle:
+    post:
+      consumes:
+      - application/json
+      description: Create a new article for a specific course
+      parameters:
+      - description: Article object to be created
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/models.Article'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Article'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new article
+      tags:
+      - articles
+  /articles/get:
+    post:
+      consumes:
+      - application/json
+      description: Get an article by its ID
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a specific article
+      tags:
+      - articles
+  /articles/updateArticle:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing article by its ID
+      parameters:
+      - description: Article ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated article object
+        in: body
+        name: article
+        required: true
+        schema:
+          $ref: '#/definitions/models.Article'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Article'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update an article
+      tags:
+      - articles
+  /categories/DeleteCategory:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a category by its ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete a category
+      tags:
+      - categories
+  /categories/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all categories with their subcategories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Category'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all categories
+      tags:
+      - categories
+  /categories/createCategory:
+    post:
+      consumes:
+      - application/json
+      description: Create a new category
+      parameters:
+      - description: Category object to be created
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Category'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new category
+      tags:
+      - categories
+  /categories/get:
+    post:
+      consumes:
+      - application/json
+      description: Get a category by its ID, including its subcategories
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a specific category
+      tags:
+      - categories
+  /categories/updateCategory:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing category by its ID
+      parameters:
+      - description: Category ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated category object
+        in: body
+        name: category
+        required: true
+        schema:
+          $ref: '#/definitions/models.Category'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Category'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update a category
+      tags:
+      - categories
   /questions/GetAnswersByQuestion:
     post:
       consumes:

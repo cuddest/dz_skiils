@@ -241,7 +241,7 @@ func (h *ArticleController) GetArticlesByCourse(c *gin.Context) {
 // @Failure 400 {object} map[string]interface{}
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
-// @Router /articles/updateArticle[put]
+// @Router /articles/updateArticle [put]
 func (h *ArticleController) UpdateArticle(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -292,7 +292,7 @@ func (h *ArticleController) UpdateArticle(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param id path int true "Article ID"
-// @Success 200 {object} gin.H
+// @Success 200 {object} map[string]interface{}
 // @Failure 400 {object} map[string]interface{}
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}

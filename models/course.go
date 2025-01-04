@@ -1,13 +1,11 @@
 package models
 
-import "time"
-
 type Course struct {
 	ID          uint          `gorm:"primaryKey" json:"ID"`
 	Name        string        `json:"Name"`
 	Description string        `json:"Description"`
 	Pricing     string        `json:"Pricing"`
-	Duration    time.Duration `json:"Duration"`
+	Duration    string        `json:"Duration"`
 	Image       string        `json:"Image"`
 	Language    string        `json:"Language"`
 	Level       string        `json:"Level"`
