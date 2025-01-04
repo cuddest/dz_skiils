@@ -21,6 +21,7 @@ import (
 
 // @host           https://dzskiils-production.up.railway.app/
 // @BasePath
+// @comment        GitHub Repository:Available soon
 
 func main() {
 	db, err := config.ConnectDB()
