@@ -9,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+/*haha*/
 type TokenRequest struct {
 	Identifier string `json:"identifier"`
 	Password   string `json:"password"`
