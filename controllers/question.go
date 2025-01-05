@@ -56,7 +56,17 @@ func (h *QuestionController) validateQuestion(question *models.Question) error {
 	return nil
 }
 
-// CreateQuestion handles the creation of a new question
+// @Summary Create a new question
+// @Description Create a new question in the system
+// @Tags questions
+// @Accept json
+// @Produce json
+// @Param question body models.Question true "Question information"
+// @Success 201 {object} models.Question
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /questions/createQuestion [post]
 func (h *QuestionController) CreateQuestion(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -95,7 +105,18 @@ func (h *QuestionController) CreateQuestion(c *gin.Context) {
 	c.JSON(http.StatusCreated, question)
 }
 
-// GetQuestion retrieves a specific question by ID
+// @Summary Get question by ID
+// @Description Retrieve a question by its ID
+// @Tags questions
+// @Accept json
+// @Produce json
+// @Param id path int true "Question ID"
+// @Success 200 {object} models.Question
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /questions/get [post]
 func (h *QuestionController) GetQuestion(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -123,7 +144,15 @@ func (h *QuestionController) GetQuestion(c *gin.Context) {
 	c.JSON(http.StatusOK, question)
 }
 
-// GetAllQuestions retrieves all questions
+// @Summary Get all questions
+// @Description Retrieve a list of all questions
+// @Tags questions
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Question
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /questions/all [get]
 func (h *QuestionController) GetAllQuestions(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -155,7 +184,20 @@ func (h *QuestionController) GetAllQuestions(c *gin.Context) {
 	c.JSON(http.StatusOK, questions)
 }
 
-// UpdateQuestion updates an existing question
+// @Summary Update question
+// @Description Update an existing question
+// @Tags questions
+// @Accept json
+// @Produce json
+// @Param id path int true "Question ID"
+// @Param question body models.Question true "Updated question information"
+// @Success 200 {object} models.Question
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /questions/updateQuestion [put]
+
 func (h *QuestionController) UpdateQuestion(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -199,7 +241,19 @@ func (h *QuestionController) UpdateQuestion(c *gin.Context) {
 	c.JSON(http.StatusOK, question)
 }
 
-// DeleteQuestion deletes a question by ID
+// @Summary Delete question
+// @Description Delete a question from the system
+// @Tags questions
+// @Accept json
+// @Produce json
+// @Param id path int true "Question ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /questions/DeleteQuestion [delete]
+
 func (h *QuestionController) DeleteQuestion(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
