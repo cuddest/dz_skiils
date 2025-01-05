@@ -238,6 +238,143 @@ info:
   title: DZ Skills API
   version: "1.0"
 paths:
+  /Courses/DeleteCourse:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a course by ID
+      parameters:
+      - description: Course ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete course
+      tags:
+      - courses
+  /Courses/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all courses
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Course'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all courses
+      tags:
+      - courses
+  /Courses/get:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a course by its ID
+      parameters:
+      - description: Course ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Course'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get course by ID
+      tags:
+      - courses
+  /Courses/updateCourse:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing course
+      parameters:
+      - description: Course ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Course object
+        in: body
+        name: course
+        required: true
+        schema:
+          $ref: '#/definitions/models.Course'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Course'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update course
+      tags:
+      - courses
   /answers/DeleteAnswer:
     delete:
       consumes:
@@ -760,6 +897,422 @@ paths:
       summary: Update a category
       tags:
       - categories
+  /coursequizzs/DeleteCourseQuizz:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a quiz by ID
+      parameters:
+      - description: Quiz ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete quiz
+      tags:
+      - quizzes
+  /coursequizzs/GetQuizzesByCourse:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve all quizzes for a specific course
+      parameters:
+      - description: Course ID
+        in: path
+        name: courseId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CourseQuizz'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get quizzes by course
+      tags:
+      - quizzes
+  /coursequizzs/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all quizzes
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.CourseQuizz'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all quizzes
+      tags:
+      - quizzes
+  /coursequizzs/createCourseQuizz:
+    post:
+      consumes:
+      - application/json
+      description: Create a new quiz
+      parameters:
+      - description: Quiz object
+        in: body
+        name: quiz
+        required: true
+        schema:
+          $ref: '#/definitions/models.CourseQuizz'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.CourseQuizz'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create new quiz
+      tags:
+      - quizzes
+  /coursequizzs/get:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a quiz by its ID
+      parameters:
+      - description: Quiz ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CourseQuizz'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get quiz by ID
+      tags:
+      - quizzes
+  /coursequizzs/updateCourseQuizz:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing quiz
+      parameters:
+      - description: Quiz ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Quiz object
+        in: body
+        name: quiz
+        required: true
+        schema:
+          $ref: '#/definitions/models.CourseQuizz'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CourseQuizz'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update quiz
+      tags:
+      - quizzes
+  /cratings/GetCourseAverageRating:
+    post:
+      consumes:
+      - application/json
+      description: Get the average rating for a specific course
+      parameters:
+      - description: Course ID
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get course average rating
+      tags:
+      - ratings
+  /cratings/GetCratingByCourseAndStudent:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a specific rating by course and student IDs
+      parameters:
+      - description: Course ID
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      - description: Student ID
+        in: path
+        name: student_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Crating'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get rating by course and student
+      tags:
+      - ratings
+  /cratings/GetCratingsByCourse:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve all ratings for a specific course
+      parameters:
+      - description: Course ID
+        in: path
+        name: course_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Crating'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get ratings by course
+      tags:
+      - ratings
+  /cratings/GetCratingsByStudent:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve all ratings for a specific student
+      parameters:
+      - description: Student ID
+        in: path
+        name: student_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Crating'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get ratings by student
+      tags:
+      - ratings
+  /cratings/createCrating:
+    post:
+      consumes:
+      - application/json
+      description: Create a new course rating
+      parameters:
+      - description: Rating object
+        in: body
+        name: rating
+        required: true
+        schema:
+          $ref: '#/definitions/models.Crating'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Crating'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create new rating
+      tags:
+      - ratings
+  /cratings/updateCrating:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing rating
+      parameters:
+      - description: Rating object
+        in: body
+        name: rating
+        required: true
+        schema:
+          $ref: '#/definitions/models.Crating'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update rating
+      tags:
+      - ratings
   /questions/GetAnswersByQuestion:
     post:
       consumes:
