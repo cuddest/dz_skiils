@@ -77,6 +77,18 @@ func (h *ExamController) validateExam(exam *models.Exam) error {
 	return nil
 }
 
+// @Summary Create new exam
+// @Description Create a new exam in the system
+// @Tags exams
+// @Accept json
+// @Produce json
+// @Param exam body models.Exam true "Exam object"
+// @Success 201 {object} models.Exam
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /exams/createExam [post]
+// CreateExam creates a new exam
 func (h *ExamController) CreateExam(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -115,7 +127,18 @@ func (h *ExamController) CreateExam(c *gin.Context) {
 	c.JSON(http.StatusCreated, exam)
 }
 
-// GetExam retrieves a specific exam by ID
+// @Summary Get exam by ID
+// @Description Get a specific exam by its ID
+// @Tags exams
+// @Accept json
+// @Produce json
+// @Param id body int true "Exam ID"
+// @Success 200 {object} models.Exam
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /exams/get [post]
+// GetExam retrieves a specific exam
 func (h *ExamController) GetExam(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -144,6 +167,14 @@ func (h *ExamController) GetExam(c *gin.Context) {
 	c.JSON(http.StatusOK, exam)
 }
 
+// @Summary Get all exams
+// @Description Retrieve all exams from the database
+// @Tags exams
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Exam
+// @Failure 500 {object} map[string]interface{}
+// @Router /exams/all [get]
 // GetAllExams retrieves all exams
 func (h *ExamController) GetAllExams(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -177,7 +208,18 @@ func (h *ExamController) GetAllExams(c *gin.Context) {
 	c.JSON(http.StatusOK, exams)
 }
 
-// GetExamsByCourse retrieves all exams for a specific course
+// @Summary Get exams by course
+// @Description Get all exams for a specific course
+// @Tags exams
+// @Accept json
+// @Produce json
+// @Param courseId body int true "Course ID"
+// @Success 200 {array} models.Exam
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /exams/GetExamsByCourse [post]
+// GetExamsByCourse retrieves exams by course ID
 func (h *ExamController) GetExamsByCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -228,7 +270,18 @@ func (h *ExamController) GetExamsByCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, exams)
 }
 
-// UpdateExam updates an existing exam
+// @Summary Update exam
+// @Description Update an existing exam
+// @Tags exams
+// @Accept json
+// @Produce json
+// @Param exam body models.Exam true "Updated exam object"
+// @Success 200 {object} models.Exam
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /exams/updateExam [put]
+// UpdateExam updates an exam
 func (h *ExamController) UpdateExam(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -284,7 +337,18 @@ func (h *ExamController) UpdateExam(c *gin.Context) {
 	c.JSON(http.StatusOK, exam)
 }
 
-// DeleteExam deletes an exam by ID
+// @Summary Delete exam
+// @Description Delete an exam by its ID
+// @Tags exams
+// @Accept json
+// @Produce json
+// @Param id body int true "Exam ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /exams/DeleteExam [delete]
+// DeleteExam deletes an exam
 func (h *ExamController) DeleteExam(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
