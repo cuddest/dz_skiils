@@ -57,7 +57,17 @@ func (h *SubCatController) validateSubCat(subcat *models.SubCat) error {
 	return nil
 }
 
-// CreateSubCat handles the creation of a new subcategory
+// @Summary Create a new subcategory
+// @Description Create a new subcategory with the provided information
+// @Tags subcategories
+// @Accept json
+// @Produce json
+// @Param subcategory body models.SubCat true "Subcategory information"
+// @Success 201 {object} models.SubCat
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /subcats/createSubCat [post]
 func (h *SubCatController) CreateSubCat(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -110,7 +120,17 @@ func (h *SubCatController) CreateSubCat(c *gin.Context) {
 	c.JSON(http.StatusCreated, subcat)
 }
 
-// GetSubCat retrieves a specific subcategory by ID
+// @Summary Get a specific subcategory
+// @Description Get a subcategory by its ID
+// @Tags subcategories
+// @Accept json
+// @Produce json
+// @Param id path int true "Subcategory ID"
+// @Success 200 {object} models.SubCat
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /subcats/get [post]
 func (h *SubCatController) GetSubCat(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -138,7 +158,14 @@ func (h *SubCatController) GetSubCat(c *gin.Context) {
 	c.JSON(http.StatusOK, subcat)
 }
 
-// GetAllSubCats retrieves all subcategories
+// @Summary Get all subcategories
+// @Description Retrieve all subcategories
+// @Tags subcategories
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.SubCat
+// @Failure 500 {object} map[string]interface{}
+// @Router /subcats/all [get]
 func (h *SubCatController) GetAllSubCats(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -170,7 +197,17 @@ func (h *SubCatController) GetAllSubCats(c *gin.Context) {
 	c.JSON(http.StatusOK, subcats)
 }
 
-// GetSubCatsByCategory retrieves all subcategories for a specific category
+// @Summary Get subcategories by category
+// @Description Get all subcategories belonging to a specific category
+// @Tags subcategories
+// @Accept json
+// @Produce json
+// @Param categoryId path int true "Category ID"
+// @Success 200 {array} models.SubCat
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /subcats/GetSubCatsByCategory [post]
 func (h *SubCatController) GetSubCatsByCategory(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -220,7 +257,18 @@ func (h *SubCatController) GetSubCatsByCategory(c *gin.Context) {
 	c.JSON(http.StatusOK, subcats)
 }
 
-// UpdateSubCat updates an existing subcategory
+// @Summary Update a subcategory
+// @Description Update an existing subcategory's information
+// @Tags subcategories
+// @Accept json
+// @Produce json
+// @Param id path int true "Subcategory ID"
+// @Param subcategory body models.SubCat true "Updated subcategory information"
+// @Success 200 {object} models.SubCat
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /subcats/updateSubCat [put]
 func (h *SubCatController) UpdateSubCat(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -276,7 +324,17 @@ func (h *SubCatController) UpdateSubCat(c *gin.Context) {
 	c.JSON(http.StatusOK, subcat)
 }
 
-// DeleteSubCat deletes a subcategory by ID
+// @Summary Delete a subcategory
+// @Description Delete a subcategory by its ID
+// @Tags subcategories
+// @Accept json
+// @Produce json
+// @Param id path int true "Subcategory ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /subcats/DeleteSubCat [delete]
 func (h *SubCatController) DeleteSubCat(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
