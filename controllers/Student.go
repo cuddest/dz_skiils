@@ -17,7 +17,16 @@ func NewStudentController(db *sql.DB) *StudentController {
 	return &StudentController{db: db}
 }
 
-// Create a new student
+// @Summary Create a new student
+// @Description Register a new student in the system
+// @Tags students
+// @Accept json
+// @Produce json
+// @Param student body models.Student true "Student information"
+// @Success 201 {object} models.Student
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /students/CreateStudent [post]
 func (h *StudentController) CreateStudent(c *gin.Context) {
 	var student models.Student
 
@@ -40,6 +49,18 @@ func (h *StudentController) CreateStudent(c *gin.Context) {
 	c.JSON(http.StatusCreated, student)
 }
 
+// @Summary Get student by ID
+// @Description Retrieve a student's information by their ID
+// @Tags students
+// @Accept json
+// @Produce json
+// @Param id path int true "Student ID"
+// @Success 200 {object} models.Student
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /students/GetStudent [post]
 func (h *StudentController) GetStudent(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -70,6 +91,15 @@ func (h *StudentController) GetStudent(c *gin.Context) {
 	c.JSON(http.StatusOK, student)
 }
 
+// @Summary Get all students
+// @Description Retrieve a list of all students
+// @Tags students
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Student
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /students/all [get]
 func (h *StudentController) GetAllStudents(c *gin.Context) {
 	rows, err := h.db.Query(`SELECT id, full_name, email, password, picture FROM students`)
 	if err != nil {
@@ -96,7 +126,18 @@ func (h *StudentController) GetAllStudents(c *gin.Context) {
 	c.JSON(http.StatusOK, students)
 }
 
-// Update a student by ID
+// @Summary Update student
+// @Description Update a student's information
+// @Tags students
+// @Accept json
+// @Produce json
+// @Param id path int true "Student ID"
+// @Param student body models.Student true "Updated student information"
+// @Success 200 {object} models.Student
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /students/UpdateUser [put]
 func (h *StudentController) UpdateStudent(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -122,7 +163,17 @@ func (h *StudentController) UpdateStudent(c *gin.Context) {
 	c.JSON(http.StatusOK, student)
 }
 
-// Delete a student by ID
+// @Summary Delete student
+// @Description Delete a student from the system
+// @Tags students
+// @Accept json
+// @Produce json
+// @Param id path int true "Student ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /students/DeleteUser [delete]
 func (h *StudentController) DeleteStudent(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
