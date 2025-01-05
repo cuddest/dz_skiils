@@ -64,6 +64,18 @@ func (h *CourseQuizzController) validateQuizz(quizz *models.CourseQuizz) error {
 }
 
 // CreateQuizz handles the creation of a new quiz
+// @Summary Create new quiz
+// @Description Create a new quiz
+// @Tags quizzes
+// @Accept json
+// @Produce json
+// @Param quiz body models.CourseQuizz true "Quiz object"
+// @Success 201 {object} models.CourseQuizz
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /coursequizzs/createCourseQuizz [post]
+// CreateQuizz creates a new quiz
 func (h *CourseQuizzController) CreateQuizz(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -104,7 +116,18 @@ func (h *CourseQuizzController) CreateQuizz(c *gin.Context) {
 	c.JSON(http.StatusCreated, quizz)
 }
 
-// GetQuizz retrieves a specific quiz by ID
+// @Summary Get quiz by ID
+// @Description Retrieve a quiz by its ID
+// @Tags quizzes
+// @Accept json
+// @Produce json
+// @Param id path int true "Quiz ID"
+// @Success 200 {object} models.CourseQuizz
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /coursequizzs/get [post]
+// GetQuizz retrieves a quiz by ID
 func (h *CourseQuizzController) GetQuizz(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -134,6 +157,16 @@ func (h *CourseQuizzController) GetQuizz(c *gin.Context) {
 	c.JSON(http.StatusOK, quizz)
 }
 
+// Course Quiz Controller Swagger Documentation
+
+// @Summary Get all quizzes
+// @Description Retrieve a list of all quizzes
+// @Tags quizzes
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.CourseQuizz
+// @Failure 500 {object} map[string]interface{}
+// @Router /coursequizzs/all [get]
 // GetAllQuizzes retrieves all quizzes
 func (h *CourseQuizzController) GetAllQuizzes(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -168,7 +201,18 @@ func (h *CourseQuizzController) GetAllQuizzes(c *gin.Context) {
 	c.JSON(http.StatusOK, quizzes)
 }
 
-// GetQuizzesByCourse retrieves all quizzes for a specific course
+// @Summary Get quizzes by course
+// @Description Retrieve all quizzes for a specific course
+// @Tags quizzes
+// @Accept json
+// @Produce json
+// @Param courseId path int true "Course ID"
+// @Success 200 {array} models.CourseQuizz
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /coursequizzs/GetQuizzesByCourse [post]
+// GetQuizzesByCourse retrieves quizzes by course ID
 func (h *CourseQuizzController) GetQuizzesByCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -220,7 +264,19 @@ func (h *CourseQuizzController) GetQuizzesByCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, quizzes)
 }
 
-// UpdateQuizz updates an existing quiz
+// @Summary Update quiz
+// @Description Update an existing quiz
+// @Tags quizzes
+// @Accept json
+// @Produce json
+// @Param id path int true "Quiz ID"
+// @Param quiz body models.CourseQuizz true "Quiz object"
+// @Success 200 {object} models.CourseQuizz
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /coursequizzs/updateCourseQuizz [put]
+// UpdateQuizz updates a quiz
 func (h *CourseQuizzController) UpdateQuizz(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -278,7 +334,18 @@ func (h *CourseQuizzController) UpdateQuizz(c *gin.Context) {
 	c.JSON(http.StatusOK, quizz)
 }
 
-// DeleteQuizz deletes a quiz by ID
+// @Summary Delete quiz
+// @Description Delete a quiz by ID
+// @Tags quizzes
+// @Accept json
+// @Produce json
+// @Param id path int true "Quiz ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /coursequizzs/DeleteCourseQuizz [delete]
+// DeleteQuizz deletes a quiz
 func (h *CourseQuizzController) DeleteQuizz(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
