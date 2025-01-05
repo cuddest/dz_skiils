@@ -121,6 +121,45 @@ definitions:
       student_id:
         type: integer
     type: object
+  models.Exam:
+    properties:
+      Description:
+        type: string
+      ID:
+        type: integer
+      course:
+        allOf:
+        - $ref: '#/definitions/models.Course'
+        description: One-to-one relationship with Course
+      course_id:
+        description: Ensure that each exam is linked to one course
+        type: integer
+      examQuizzes:
+        items:
+          $ref: '#/definitions/models.ExamQuizz'
+        type: array
+    type: object
+  models.ExamQuizz:
+    properties:
+      Answer:
+        type: integer
+      ID:
+        type: integer
+      Option1:
+        type: string
+      Option2:
+        type: string
+      Option3:
+        type: string
+      Option4:
+        type: string
+      Question:
+        type: string
+      exam:
+        $ref: '#/definitions/models.Exam'
+      exam_id:
+        type: integer
+    type: object
   models.Feedback:
     properties:
       Description:
@@ -1313,6 +1352,576 @@ paths:
       summary: Update rating
       tags:
       - ratings
+  /examquizzes/GetExamQuizzesByExam:
+    post:
+      consumes:
+      - application/json
+      description: Get all quizzes for a specific exam
+      parameters:
+      - description: Exam ID
+        in: body
+        name: examId
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ExamQuizz'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get exam quizzes by exam
+      tags:
+      - examquizzes
+  /examquizzes/createExamQuiz:
+    post:
+      consumes:
+      - application/json
+      description: Create a new exam quiz in the system
+      parameters:
+      - description: Exam Quiz object
+        in: body
+        name: quiz
+        required: true
+        schema:
+          $ref: '#/definitions/models.ExamQuizz'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.ExamQuizz'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create new exam quiz
+      tags:
+      - examquizzes
+  /examquizzes/get:
+    post:
+      consumes:
+      - application/json
+      description: Get a specific exam quiz by its ID
+      parameters:
+      - description: Exam Quiz ID
+        in: body
+        name: id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ExamQuizz'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get exam quiz by ID
+      tags:
+      - examquizzes
+  /examquizzes/updateExamQuiz:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing exam quiz
+      parameters:
+      - description: Updated exam quiz object
+        in: body
+        name: quiz
+        required: true
+        schema:
+          $ref: '#/definitions/models.ExamQuizz'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ExamQuizz'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update exam quiz
+      tags:
+      - examquizzes
+  /exams/DeleteExam:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an exam by its ID
+      parameters:
+      - description: Exam ID
+        in: body
+        name: id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete exam
+      tags:
+      - exams
+  /exams/GetExamsByCourse:
+    post:
+      consumes:
+      - application/json
+      description: Get all exams for a specific course
+      parameters:
+      - description: Course ID
+        in: body
+        name: courseId
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Exam'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get exams by course
+      tags:
+      - exams
+  /exams/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all exams from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Exam'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all exams
+      tags:
+      - exams
+  /exams/createExam:
+    post:
+      consumes:
+      - application/json
+      description: Create a new exam in the system
+      parameters:
+      - description: Exam object
+        in: body
+        name: exam
+        required: true
+        schema:
+          $ref: '#/definitions/models.Exam'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Exam'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create new exam
+      tags:
+      - exams
+  /exams/get:
+    post:
+      consumes:
+      - application/json
+      description: Get a specific exam by its ID
+      parameters:
+      - description: Exam ID
+        in: body
+        name: id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Exam'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get exam by ID
+      tags:
+      - exams
+  /exams/updateExam:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing exam
+      parameters:
+      - description: Updated exam object
+        in: body
+        name: exam
+        required: true
+        schema:
+          $ref: '#/definitions/models.Exam'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Exam'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update exam
+      tags:
+      - exams
+  /feedbacks/DeleteFeedback:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a feedback by its ID
+      parameters:
+      - description: Feedback ID
+        in: body
+        name: id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete feedback
+      tags:
+      - feedbacks
+  /feedbacks/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all feedbacks from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Feedback'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all feedbacks
+      tags:
+      - feedbacks
+  /feedbacks/createFeedback:
+    post:
+      consumes:
+      - application/json
+      description: Create a new feedback in the system
+      parameters:
+      - description: Feedback object
+        in: body
+        name: feedback
+        required: true
+        schema:
+          $ref: '#/definitions/models.Feedback'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Feedback'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create new feedback
+      tags:
+      - feedbacks
+  /feedbacks/get:
+    post:
+      consumes:
+      - application/json
+      description: Get a specific feedback by its ID
+      parameters:
+      - description: Feedback ID
+        in: body
+        name: id
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Feedback'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get feedback by ID
+      tags:
+      - feedbacks
+  /feedbacks/getFeedbacksByStudent:
+    post:
+      consumes:
+      - application/json
+      description: Get all feedbacks for a specific student
+      parameters:
+      - description: Student ID
+        in: body
+        name: studentId
+        required: true
+        schema:
+          type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Feedback'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get feedbacks by student
+      tags:
+      - feedbacks
+  /feedbacks/updateFeedback:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing feedback
+      parameters:
+      - description: Updated feedback object
+        in: body
+        name: feedback
+        required: true
+        schema:
+          $ref: '#/definitions/models.Feedback'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Feedback'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update feedback
+      tags:
+      - feedbacks
   /questions/GetAnswersByQuestion:
     post:
       consumes:

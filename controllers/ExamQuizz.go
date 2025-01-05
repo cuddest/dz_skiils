@@ -80,7 +80,18 @@ func (h *ExamQuizzController) validateExamQuizz(quizz *models.ExamQuizz) error {
 	return nil
 }
 
-// CreateExamQuizz handles the creation of a new exam quiz question
+// @Summary Create new exam quiz
+// @Description Create a new exam quiz in the system
+// @Tags examquizzes
+// @Accept json
+// @Produce json
+// @Param quiz body models.ExamQuizz true "Exam Quiz object"
+// @Success 201 {object} models.ExamQuizz
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /examquizzes/createExamQuiz [post]
+// CreateExamQuizz creates a new exam quiz
 func (h *ExamQuizzController) CreateExamQuizz(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -120,7 +131,18 @@ func (h *ExamQuizzController) CreateExamQuizz(c *gin.Context) {
 	c.JSON(http.StatusCreated, quizz)
 }
 
-// GetExamQuizz retrieves a specific exam quiz by ID
+// @Summary Get exam quiz by ID
+// @Description Get a specific exam quiz by its ID
+// @Tags examquizzes
+// @Accept json
+// @Produce json
+// @Param id body int true "Exam Quiz ID"
+// @Success 200 {object} models.ExamQuizz
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /examquizzes/get [post]
+// GetExamQuizz retrieves a specific exam quiz
 func (h *ExamQuizzController) GetExamQuizz(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -150,7 +172,16 @@ func (h *ExamQuizzController) GetExamQuizz(c *gin.Context) {
 	c.JSON(http.StatusOK, quizz)
 }
 
+// @Summary Get all exam quizzes
+// @Description Retrieve all exam quizzes from the database
+// @Tags examquizzes
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.ExamQuizz
+// @Failure 500 {object} map[string]interface{}
+// @Router /examquizzes/all [get]
 // GetAllExamQuizzes retrieves all exam quizzes
+
 func (h *ExamQuizzController) GetAllExamQuizzes(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -184,7 +215,18 @@ func (h *ExamQuizzController) GetAllExamQuizzes(c *gin.Context) {
 	c.JSON(http.StatusOK, quizzes)
 }
 
-// GetExamQuizzesByExam retrieves all quizzes for a specific exam
+// @Summary Get exam quizzes by exam
+// @Description Get all quizzes for a specific exam
+// @Tags examquizzes
+// @Accept json
+// @Produce json
+// @Param examId body int true "Exam ID"
+// @Success 200 {array} models.ExamQuizz
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /examquizzes/GetExamQuizzesByExam [post]
+// GetExamQuizzesByExam retrieves quizzes by exam ID
 func (h *ExamQuizzController) GetExamQuizzesByExam(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -236,7 +278,18 @@ func (h *ExamQuizzController) GetExamQuizzesByExam(c *gin.Context) {
 	c.JSON(http.StatusOK, quizzes)
 }
 
-// UpdateExamQuizz updates an existing exam quiz
+// @Summary Update exam quiz
+// @Description Update an existing exam quiz
+// @Tags examquizzes
+// @Accept json
+// @Produce json
+// @Param quiz body models.ExamQuizz true "Updated exam quiz object"
+// @Success 200 {object} models.ExamQuizz
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /examquizzes/updateExamQuiz [put]
+// UpdateExamQuizz updates an exam quiz
 func (h *ExamQuizzController) UpdateExamQuizz(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -293,7 +346,19 @@ func (h *ExamQuizzController) UpdateExamQuizz(c *gin.Context) {
 	c.JSON(http.StatusOK, quizz)
 }
 
-// DeleteExamQuizz deletes an exam quiz by ID
+// @Summary Delete exam quiz
+// @Description Delete an exam quiz by its ID
+// @Tags examquizzes
+// @Accept json
+// @Produce json
+// @Param id body int true "Exam Quiz ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /examquizzes/DeleteExamQuiz [delete]
+// DeleteExamQuizz deletes an exam quiz
+
 func (h *ExamQuizzController) DeleteExamQuizz(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()

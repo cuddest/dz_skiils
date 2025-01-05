@@ -80,7 +80,18 @@ func (h *FeedbackController) validateFeedback(feedback *models.Feedback) error {
 	return nil
 }
 
-// CreateFeedback handles the creation of a new feedback
+// @Summary Create new feedback
+// @Description Create a new feedback in the system
+// @Tags feedbacks
+// @Accept json
+// @Produce json
+// @Param feedback body models.Feedback true "Feedback object"
+// @Success 201 {object} models.Feedback
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /feedbacks/createFeedback [post]
+// CreateFeedback creates a new feedback
 func (h *FeedbackController) CreateFeedback(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -120,7 +131,18 @@ func (h *FeedbackController) CreateFeedback(c *gin.Context) {
 	c.JSON(http.StatusCreated, feedback)
 }
 
-// GetFeedback retrieves a specific feedback by ID
+// @Summary Get feedback by ID
+// @Description Get a specific feedback by its ID
+// @Tags feedbacks
+// @Accept json
+// @Produce json
+// @Param id body int true "Feedback ID"
+// @Success 200 {object} models.Feedback
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /feedbacks/get [post]
+// GetFeedback retrieves a specific feedback
 func (h *FeedbackController) GetFeedback(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -150,6 +172,14 @@ func (h *FeedbackController) GetFeedback(c *gin.Context) {
 	c.JSON(http.StatusOK, feedback)
 }
 
+// @Summary Get all feedbacks
+// @Description Retrieve all feedbacks from the database
+// @Tags feedbacks
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Feedback
+// @Failure 500 {object} map[string]interface{}
+// @Router /feedbacks/all [get]
 // GetAllFeedbacks retrieves all feedbacks
 func (h *FeedbackController) GetAllFeedbacks(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -184,7 +214,18 @@ func (h *FeedbackController) GetAllFeedbacks(c *gin.Context) {
 	c.JSON(http.StatusOK, feedbacks)
 }
 
-// GetFeedbacksByStudent retrieves all feedbacks for a specific student
+// @Summary Get feedbacks by student
+// @Description Get all feedbacks for a specific student
+// @Tags feedbacks
+// @Accept json
+// @Produce json
+// @Param studentId body int true "Student ID"
+// @Success 200 {array} models.Feedback
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /feedbacks/getFeedbacksByStudent [post]
+// GetFeedbacksByStudent retrieves feedbacks by student ID
 func (h *FeedbackController) GetFeedbacksByStudent(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -236,7 +277,18 @@ func (h *FeedbackController) GetFeedbacksByStudent(c *gin.Context) {
 	c.JSON(http.StatusOK, feedbacks)
 }
 
-// UpdateFeedback updates an existing feedback
+// @Summary Update feedback
+// @Description Update an existing feedback
+// @Tags feedbacks
+// @Accept json
+// @Produce json
+// @Param feedback body models.Feedback true "Updated feedback object"
+// @Success 200 {object} models.Feedback
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /feedbacks/updateFeedback [put]
+// UpdateFeedback updates a feedback
 func (h *FeedbackController) UpdateFeedback(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -293,7 +345,18 @@ func (h *FeedbackController) UpdateFeedback(c *gin.Context) {
 	c.JSON(http.StatusOK, feedback)
 }
 
-// DeleteFeedback deletes a feedback by ID
+// @Summary Delete feedback
+// @Description Delete a feedback by its ID
+// @Tags feedbacks
+// @Accept json
+// @Produce json
+// @Param id body int true "Feedback ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /feedbacks/DeleteFeedback [delete]
+// DeleteFeedback deletes a feedback
 func (h *FeedbackController) DeleteFeedback(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
