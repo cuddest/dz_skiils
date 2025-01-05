@@ -60,7 +60,17 @@ func (h *VideoController) validateVideo(video *models.Video) error {
 	return nil
 }
 
-// CreateVideo handles the creation of a new video
+// @Summary Create a new video
+// @Description Create a new video with the provided information
+// @Tags videos
+// @Accept json
+// @Produce json
+// @Param video body models.Video true "Video information"
+// @Success 201 {object} models.Video
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /videos/createVideo [post]
 func (h *VideoController) CreateVideo(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -99,7 +109,17 @@ func (h *VideoController) CreateVideo(c *gin.Context) {
 	c.JSON(http.StatusCreated, video)
 }
 
-// GetVideo retrieves a specific video by ID
+// @Summary Get a specific video
+// @Description Get a video by its ID
+// @Tags videos
+// @Accept json
+// @Produce json
+// @Param id path int true "Video ID"
+// @Success 200 {object} models.Video
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /videos/get [post]
 func (h *VideoController) GetVideo(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -127,7 +147,14 @@ func (h *VideoController) GetVideo(c *gin.Context) {
 	c.JSON(http.StatusOK, video)
 }
 
-// GetAllVideos retrieves all videos
+// @Summary Get all videos
+// @Description Retrieve all videos
+// @Tags videos
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Video
+// @Failure 500 {object} map[string]interface{}
+// @Router /videos/all [get]
 func (h *VideoController) GetAllVideos(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -159,7 +186,17 @@ func (h *VideoController) GetAllVideos(c *gin.Context) {
 	c.JSON(http.StatusOK, videos)
 }
 
-// GetVideosByCourse retrieves all videos for a specific course
+// @Summary Get videos by course
+// @Description Get all videos belonging to a specific course
+// @Tags videos
+// @Accept json
+// @Produce json
+// @Param courseId path int true "Course ID"
+// @Success 200 {array} models.Video
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /videos/GetVideosByCourse [post]
 func (h *VideoController) GetVideosByCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -209,7 +246,18 @@ func (h *VideoController) GetVideosByCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, videos)
 }
 
-// UpdateVideo updates an existing video
+// @Summary Update a video
+// @Description Update an existing video's information
+// @Tags videos
+// @Accept json
+// @Produce json
+// @Param id path int true "Video ID"
+// @Param video body models.Video true "Updated video information"
+// @Success 200 {object} models.Video
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /videos/updateVideo [put]
 func (h *VideoController) UpdateVideo(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -265,7 +313,17 @@ func (h *VideoController) UpdateVideo(c *gin.Context) {
 	c.JSON(http.StatusOK, video)
 }
 
-// DeleteVideo deletes a video by ID
+// @Summary Delete a video
+// @Description Delete a video by its ID
+// @Tags videos
+// @Accept json
+// @Produce json
+// @Param id path int true "Video ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /videos/DeleteVideo [delete]
 func (h *VideoController) DeleteVideo(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
