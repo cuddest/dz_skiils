@@ -76,18 +76,7 @@ func (h *StudentCourseController) validateStudentCourse(sc *models.StudentCourse
 // @Param studentCourse body models.StudentCourse true "Student course enrollment information"
 // @Success 201 {object} models.StudentCourse
 // @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map/ @Summary Get student course enrollment
-// @Description Retrieve a specific student course enrollment
-// @Tags student-courses
-// @Accept json
-// @Produce json
-// @Param studentId path int true "Student ID"
-// @Param courseId path int true "Course ID"
-// @Success 200 {object} models.StudentCourse
-// @Failure 400 {object} map[string]interface{}
-// @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
-// @Security ApiKeyAuth[string]interface{}
 // @Security ApiKeyAuth
 // @Router /student_courses/createStudentCourse [post]
 func (h *StudentCourseController) CreateStudentCourse(c *gin.Context) {
@@ -216,7 +205,7 @@ func (h *StudentCourseController) GetAllStudentCourses(c *gin.Context) {
 // @Param studentId path int true "Student ID"
 // @Param courseId path int true "Course ID"
 // @Param answers body []ExamAnswer true "Array of exam answers"
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} models.Answer
 // @Failure 400 {object} map[string]interface{}
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
@@ -386,7 +375,7 @@ func (h *StudentCourseController) UpdateStudentCourse(c *gin.Context) {
 // @Produce json
 // @Param studentId path int true "Student ID"
 // @Param courseId path int true "Course ID"
-// @Success 200 {object} map[string]interface{}
+// @Success 200 {object} models.Answer
 // @Failure 400 {object} map[string]interface{}
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}

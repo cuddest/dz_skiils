@@ -1,4 +1,11 @@
 definitions:
+  controllers.ExamAnswer:
+    properties:
+      answer:
+        type: integer
+      quizz_id:
+        type: integer
+    type: object
   models.Answer:
     properties:
       Answer:
@@ -214,6 +221,21 @@ definitions:
         type: array
       username:
         type: string
+    type: object
+  models.StudentCourse:
+    properties:
+      certificate:
+        type: string
+      courseID:
+        type: integer
+      enrollment:
+        type: string
+      grade:
+        type: string
+      issued:
+        type: boolean
+      studentID:
+        type: integer
     type: object
   models.SubCat:
     properties:
@@ -1960,4 +1982,487 @@ paths:
       summary: Get answers by question
       tags:
       - answers
+  /questions/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all questions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Question'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all questions
+      tags:
+      - questions
+  /questions/createQuestion:
+    post:
+      consumes:
+      - application/json
+      description: Create a new question in the system
+      parameters:
+      - description: Question information
+        in: body
+        name: question
+        required: true
+        schema:
+          $ref: '#/definitions/models.Question'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Question'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new question
+      tags:
+      - questions
+  /questions/get:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a question by its ID
+      parameters:
+      - description: Question ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Question'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get question by ID
+      tags:
+      - questions
+  /student_courses/DeleteStudentCourse:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a student course enrollment
+      parameters:
+      - description: Student ID
+        in: path
+        name: studentId
+        required: true
+        type: integer
+      - description: Course ID
+        in: path
+        name: courseId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Answer'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete student course enrollment
+      tags:
+      - student-courses
+  /student_courses/SubmitExamAnswers:
+    post:
+      consumes:
+      - application/json
+      description: Submit and grade student exam answers
+      parameters:
+      - description: Student ID
+        in: path
+        name: studentId
+        required: true
+        type: integer
+      - description: Course ID
+        in: path
+        name: courseId
+        required: true
+        type: integer
+      - description: Array of exam answers
+        in: body
+        name: answers
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/controllers.ExamAnswer'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Answer'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Submit exam answers
+      tags:
+      - student-courses
+  /student_courses/createStudentCourse:
+    post:
+      consumes:
+      - application/json
+      description: Create a new student course enrollment
+      parameters:
+      - description: Student course enrollment information
+        in: body
+        name: studentCourse
+        required: true
+        schema:
+          $ref: '#/definitions/models.StudentCourse'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.StudentCourse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create student course enrollment
+      tags:
+      - student-courses
+  /student_courses/get:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a specific student course enrollment
+      parameters:
+      - description: Student ID
+        in: path
+        name: studentId
+        required: true
+        type: integer
+      - description: Course ID
+        in: path
+        name: courseId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.StudentCourse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get student course enrollment
+      tags:
+      - student-courses
+  /student_courses/updateStudentCourse:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing student course enrollment
+      parameters:
+      - description: Student ID
+        in: path
+        name: studentId
+        required: true
+        type: integer
+      - description: Course ID
+        in: path
+        name: courseId
+        required: true
+        type: integer
+      - description: Updated student course information
+        in: body
+        name: studentCourse
+        required: true
+        schema:
+          $ref: '#/definitions/models.StudentCourse'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.StudentCourse'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update student course enrollment
+      tags:
+      - student-courses
+  /students/CreateStudent:
+    post:
+      consumes:
+      - application/json
+      description: Register a new student in the system
+      parameters:
+      - description: Student information
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/models.Student'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new student
+      tags:
+      - students
+  /students/DeleteUser:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a student from the system
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete student
+      tags:
+      - students
+  /students/GetStudent:
+    post:
+      consumes:
+      - application/json
+      description: Retrieve a student's information by their ID
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get student by ID
+      tags:
+      - students
+  /students/UpdateUser:
+    put:
+      consumes:
+      - application/json
+      description: Update a student's information
+      parameters:
+      - description: Student ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated student information
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/models.Student'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update student
+      tags:
+      - students
+  /students/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve a list of all students
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Student'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all students
+      tags:
+      - students
 swagger: "2.0"
