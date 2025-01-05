@@ -66,7 +66,17 @@ func (h *CratingController) validateCrating(crating *models.Crating) error {
 	return nil
 }
 
-// CreateCrating handles the creation of a new rating
+// @Summary Create new rating
+// @Description Create a new course rating
+// @Tags ratings
+// @Accept json
+// @Produce json
+// @Param rating body models.Crating true "Rating object"
+// @Success 201 {object} models.Crating
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /cratings/createCrating [post]
+// CreateCrating creates a new rating
 func (h *CratingController) CreateCrating(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -91,7 +101,17 @@ func (h *CratingController) CreateCrating(c *gin.Context) {
 	c.JSON(http.StatusCreated, crating)
 }
 
-// GetCratingsByCourse retrieves all ratings for a specific course
+// @Summary Get ratings by course
+// @Description Retrieve all ratings for a specific course
+// @Tags ratings
+// @Accept json
+// @Produce json
+// @Param course_id path int true "Course ID"
+// @Success 200 {array} models.Crating
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /cratings/GetCratingsByCourse [post]
+// GetCratingsByCourse retrieves ratings by course
 func (h *CratingController) GetCratingsByCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -122,7 +142,17 @@ func (h *CratingController) GetCratingsByCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, cratings)
 }
 
-// GetCratingsByStudent retrieves all ratings for a specific student
+// @Summary Get ratings by student
+// @Description Retrieve all ratings for a specific student
+// @Tags ratings
+// @Accept json
+// @Produce json
+// @Param student_id path int true "Student ID"
+// @Success 200 {array} models.Crating
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /cratings/GetCratingsByStudent [post]
+// GetCratingsByStudent retrieves ratings by student
 func (h *CratingController) GetCratingsByStudent(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -153,7 +183,19 @@ func (h *CratingController) GetCratingsByStudent(c *gin.Context) {
 	c.JSON(http.StatusOK, cratings)
 }
 
-// GetCratingByCourseAndStudent retrieves a specific rating by course ID and student ID
+// @Summary Get rating by course and student
+// @Description Retrieve a specific rating by course and student IDs
+// @Tags ratings
+// @Accept json
+// @Produce json
+// @Param course_id path int true "Course ID"
+// @Param student_id path int true "Student ID"
+// @Success 200 {object} models.Crating
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /cratings/GetCratingByCourseAndStudent [post]
+// GetCratingByCourseAndStudent retrieves a specific rating
 func (h *CratingController) GetCratingByCourseAndStudent(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -184,7 +226,17 @@ func (h *CratingController) GetCratingByCourseAndStudent(c *gin.Context) {
 	c.JSON(http.StatusOK, crating)
 }
 
-// UpdateCrating updates an existing rating
+// @Summary Update rating
+// @Description Update an existing rating
+// @Tags ratings
+// @Accept json
+// @Produce json
+// @Param rating body models.Crating true "Rating object"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /cratings/updateCrating [put]
+// UpdateCrating updates a rating
 func (h *CratingController) UpdateCrating(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -209,7 +261,19 @@ func (h *CratingController) UpdateCrating(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Rating updated successfully"})
 }
 
-// DeleteCrating deletes a rating by course ID and student ID
+// @Summary Delete rating
+// @Description Delete a rating by course and student IDs
+// @Tags ratings
+// @Accept json
+// @Produce json
+// @Param course_id path int true "Course ID"
+// @Param student_id path int true "Student ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /cratings/DeleteCrating [delete]
+// DeleteCrating deletes a rating
+
 func (h *CratingController) DeleteCrating(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -234,6 +298,18 @@ func (h *CratingController) DeleteCrating(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": "Rating deleted successfully"})
 }
+
+// @Summary Get course average rating
+// @Description Get the average rating for a specific course
+// @Tags ratings
+// @Accept json
+// @Produce json
+// @Param course_id path int true "Course ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /cratings/GetCourseAverageRating [post]
+// GetCourseAverageRating retrieves average rating for a course
 func (h *CratingController) GetCourseAverageRating(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -261,6 +337,16 @@ func (h *CratingController) GetCourseAverageRating(c *gin.Context) {
 
 	c.JSON(http.StatusOK, response)
 }
+
+// @Summary Get all ratings
+// @Description Retrieve all course ratings
+// @Tags ratings
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.Crating
+// @Failure 500 {object} map[string]interface{}
+// @Router /cratings/GetAllCratings [get]
+// GetAllCratings retrieves all ratings
 
 func (h *CratingController) GetAllCratings(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
