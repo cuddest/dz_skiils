@@ -68,7 +68,28 @@ func (h *StudentCourseController) validateStudentCourse(sc *models.StudentCourse
 	return nil
 }
 
-// CreateStudentCourse handles the creation of a new student course enrollment
+// @Summary Create student course enrollment
+// @Description Create a new student course enrollment
+// @Tags student-courses
+// @Accept json
+// @Produce json
+// @Param studentCourse body models.StudentCourse true "Student course enrollment information"
+// @Success 201 {object} models.StudentCourse
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map/ @Summary Get student course enrollment
+// @Description Retrieve a specific student course enrollment
+// @Tags student-courses
+// @Accept json
+// @Produce json
+// @Param studentId path int true "Student ID"
+// @Param courseId path int true "Course ID"
+// @Success 200 {object} models.StudentCourse
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth[string]interface{}
+// @Security ApiKeyAuth
+// @Router /student_courses/createStudentCourse [post]
 func (h *StudentCourseController) CreateStudentCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -99,7 +120,19 @@ func (h *StudentCourseController) CreateStudentCourse(c *gin.Context) {
 	c.JSON(http.StatusCreated, sc)
 }
 
-// GetStudentCourse retrieves a specific student course enrollment
+// @Summary Get student course enrollment
+// @Description Retrieve a specific student course enrollment
+// @Tags student-courses
+// @Accept json
+// @Produce json
+// @Param studentId path int true "Student ID"
+// @Param courseId path int true "Course ID"
+// @Success 200 {object} models.StudentCourse
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /student_courses/get [post]
 func (h *StudentCourseController) GetStudentCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -133,7 +166,16 @@ func (h *StudentCourseController) GetStudentCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, sc)
 }
 
-// GetAllStudentCourses retrieves all student course enrollments
+// @Summary Get all student course enrollments
+// @Description Retrieve all student course enrollments
+// @Tags student-courses
+// @Accept json
+// @Produce json
+// @Success 200 {array} models.StudentCourse
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /student_courses/all [get]
+
 func (h *StudentCourseController) GetAllStudentCourses(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -166,7 +208,20 @@ func (h *StudentCourseController) GetAllStudentCourses(c *gin.Context) {
 	c.JSON(http.StatusOK, studentCourses)
 }
 
-// SubmitExamAnswers handles the submission and grading of exam answers
+// @Summary Submit exam answers
+// @Description Submit and grade student exam answers
+// @Tags student-courses
+// @Accept json
+// @Produce json
+// @Param studentId path int true "Student ID"
+// @Param courseId path int true "Course ID"
+// @Param answers body []ExamAnswer true "Array of exam answers"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /student_courses/SubmitExamAnswers [post]
 func (h *StudentCourseController) SubmitExamAnswers(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 20*time.Second)
 	defer cancel()
@@ -263,7 +318,20 @@ func (h *StudentCourseController) SubmitExamAnswers(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-// UpdateStudentCourse updates an existing student course enrollment
+// @Summary Update student course enrollment
+// @Description Update an existing student course enrollment
+// @Tags student-courses
+// @Accept json
+// @Produce json
+// @Param studentId path int true "Student ID"
+// @Param courseId path int true "Course ID"
+// @Param studentCourse body models.StudentCourse true "Updated student course information"
+// @Success 200 {object} models.StudentCourse
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /student_courses/updateStudentCourse [put]
 func (h *StudentCourseController) UpdateStudentCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -311,7 +379,19 @@ func (h *StudentCourseController) UpdateStudentCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, sc)
 }
 
-// DeleteStudentCourse deletes a student course enrollment
+// @Summary Delete student course enrollment
+// @Description Delete a student course enrollment
+// @Tags student-courses
+// @Accept json
+// @Produce json
+// @Param studentId path int true "Student ID"
+// @Param courseId path int true "Course ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Security ApiKeyAuth
+// @Router /student_courses/DeleteStudentCourse [delete]
 func (h *StudentCourseController) DeleteStudentCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
