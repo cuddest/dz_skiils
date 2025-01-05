@@ -2465,4 +2465,639 @@ paths:
       summary: Get all students
       tags:
       - students
+  /students/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user (teacher or student) and generate an access
+        token
+      parameters:
+      - description: Login credentials (username/email and password)
+        in: body
+        name: credentials
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns JWT token
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Authentication failed
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User login
+      tags:
+      - authentication
+  /subcats/DeleteSubCat:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a subcategory by its ID
+      parameters:
+      - description: Subcategory ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete a subcategory
+      tags:
+      - subcategories
+  /subcats/GetSubCatsByCategory:
+    post:
+      consumes:
+      - application/json
+      description: Get all subcategories belonging to a specific category
+      parameters:
+      - description: Category ID
+        in: path
+        name: categoryId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SubCat'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get subcategories by category
+      tags:
+      - subcategories
+  /subcats/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all subcategories
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SubCat'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all subcategories
+      tags:
+      - subcategories
+  /subcats/createSubCat:
+    post:
+      consumes:
+      - application/json
+      description: Create a new subcategory with the provided information
+      parameters:
+      - description: Subcategory information
+        in: body
+        name: subcategory
+        required: true
+        schema:
+          $ref: '#/definitions/models.SubCat'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.SubCat'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new subcategory
+      tags:
+      - subcategories
+  /subcats/get:
+    post:
+      consumes:
+      - application/json
+      description: Get a subcategory by its ID
+      parameters:
+      - description: Subcategory ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SubCat'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a specific subcategory
+      tags:
+      - subcategories
+  /subcats/updateSubCat:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing subcategory's information
+      parameters:
+      - description: Subcategory ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated subcategory information
+        in: body
+        name: subcategory
+        required: true
+        schema:
+          $ref: '#/definitions/models.SubCat'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SubCat'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update a subcategory
+      tags:
+      - subcategories
+  /teachers/CreateTeacher:
+    post:
+      consumes:
+      - application/json
+      description: Create a new teacher account with the provided information
+      parameters:
+      - description: Teacher information
+        in: body
+        name: teacher
+        required: true
+        schema:
+          $ref: '#/definitions/models.Teacher'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Teacher'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new teacher
+      tags:
+      - teachers
+  /teachers/DeleteTeacher:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a teacher by their ID
+      parameters:
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a teacher
+      tags:
+      - teachers
+  /teachers/GetTeacher:
+    post:
+      consumes:
+      - application/json
+      description: Get a teacher by their ID
+      parameters:
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Teacher'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get a specific teacher
+      tags:
+      - teachers
+  /teachers/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all teachers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Teacher'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all teachers
+      tags:
+      - teachers
+  /teachers/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user (teacher or student) and generate an access
+        token
+      parameters:
+      - description: Login credentials (username/email and password)
+        in: body
+        name: credentials
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns JWT token
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Invalid input
+          schema:
+            additionalProperties: true
+            type: object
+        "401":
+          description: Authentication failed
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Server error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: User login
+      tags:
+      - authentication
+  /videos/DeleteVideo:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a video by its ID
+      parameters:
+      - description: Video ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete a video
+      tags:
+      - videos
+  /videos/GetVideosByCourse:
+    post:
+      consumes:
+      - application/json
+      description: Get all videos belonging to a specific course
+      parameters:
+      - description: Course ID
+        in: path
+        name: courseId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Video'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get videos by course
+      tags:
+      - videos
+  /videos/all:
+    get:
+      consumes:
+      - application/json
+      description: Retrieve all videos
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Video'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all videos
+      tags:
+      - videos
+  /videos/createVideo:
+    post:
+      consumes:
+      - application/json
+      description: Create a new video with the provided information
+      parameters:
+      - description: Video information
+        in: body
+        name: video
+        required: true
+        schema:
+          $ref: '#/definitions/models.Video'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new video
+      tags:
+      - videos
+  /videos/get:
+    post:
+      consumes:
+      - application/json
+      description: Get a video by its ID
+      parameters:
+      - description: Video ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a specific video
+      tags:
+      - videos
+  /videos/updateVideo:
+    put:
+      consumes:
+      - application/json
+      description: Update an existing video's information
+      parameters:
+      - description: Video ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Updated video information
+        in: body
+        name: video
+        required: true
+        schema:
+          $ref: '#/definitions/models.Video'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Video'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update a video
+      tags:
+      - videos
 swagger: "2.0"

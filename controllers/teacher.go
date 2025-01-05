@@ -97,7 +97,16 @@ func (h *TeacherController) checkUniqueness(ctx context.Context, teacher *models
 	return nil
 }
 
-// CreateTeacher handles the creation of a new teacher
+// @Summary Create a new teacher
+// @Description Create a new teacher account with the provided information
+// @Tags teachers
+// @Accept json
+// @Produce json
+// @Param teacher body models.Teacher true "Teacher information"
+// @Success 201 {object} models.Teacher
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /teachers/CreateTeacher [post]
 func (h *TeacherController) CreateTeacher(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -146,7 +155,18 @@ func (h *TeacherController) CreateTeacher(c *gin.Context) {
 	c.JSON(http.StatusCreated, teacher)
 }
 
-// GetTeacher retrieves a specific teacher by ID
+// @Summary Get a specific teacher
+// @Description Get a teacher by their ID
+// @Tags teachers
+// @Accept json
+// @Produce json
+// @Param id path int true "Teacher ID"
+// @Security ApiKeyAuth
+// @Success 200 {object} models.Teacher
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /teachers/GetTeacher [post]
 func (h *TeacherController) GetTeacher(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -178,7 +198,15 @@ func (h *TeacherController) GetTeacher(c *gin.Context) {
 	c.JSON(http.StatusOK, teacher)
 }
 
-// GetAllTeachers retrieves all teachers
+// @Summary Get all teachers
+// @Description Retrieve all teachers
+// @Tags teachers
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Success 200 {array} models.Teacher
+// @Failure 500 {object} map[string]interface{}
+// @Router /teachers/all [get]
 func (h *TeacherController) GetAllTeachers(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -213,7 +241,20 @@ func (h *TeacherController) GetAllTeachers(c *gin.Context) {
 	c.JSON(http.StatusOK, teachers)
 }
 
-// UpdateTeacher updates an existing teacher
+// @Summary Update a teacher
+// @Description Update an existing teacher's information
+// @Tags teachers
+// @Accept json
+// @Produce json
+// @Param id path int true "Teacher ID"
+// @Param teacher body models.Teacher true "Updated teacher information"
+// @Security ApiKeyAuth
+// @Success 200 {object} models.Teacher
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /teachers/UpdateTeacher [put]
+
 func (h *TeacherController) UpdateTeacher(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
@@ -276,7 +317,18 @@ func (h *TeacherController) UpdateTeacher(c *gin.Context) {
 	c.JSON(http.StatusOK, teacher)
 }
 
-// DeleteTeacher deletes a teacher by ID
+// @Summary Delete a teacher
+// @Description Delete a teacher by their ID
+// @Tags teachers
+// @Accept json
+// @Produce json
+// @Param id path int true "Teacher ID"
+// @Security ApiKeyAuth
+// @Success 200 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /teachers/DeleteTeacher [delete]
 func (h *TeacherController) DeleteTeacher(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()

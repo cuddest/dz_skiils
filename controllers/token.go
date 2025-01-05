@@ -14,6 +14,18 @@ type TokenRequest struct {
 	Password   string `json:"password"`
 }
 
+// @Summary User login
+// @Description Authenticate a user (teacher or student) and generate an access token
+// @Tags authentication
+// @Accept json
+// @Produce json
+// @Param credentials body object true "Login credentials (username/email and password)"
+// @Success 200 {object} map[string]interface{} "Returns JWT token"
+// @Failure 400 {object} map[string]interface{} "Invalid input"
+// @Failure 401 {object} map[string]interface{} "Authentication failed"
+// @Failure 500 {object} map[string]interface{} "Server error"
+// @Router /teachers/login [post]
+// @Router /students/login [post]
 func GenerateToken(context *gin.Context) {
 	var input = struct {
 		Email    string `json:"email"`
