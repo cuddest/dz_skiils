@@ -158,7 +158,6 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	// Student Routes
 	StudentCourseController := controllers.NewStudentController(db)
 	StudentGroup := router.Group("/students")
-	StudentGroup.POST("/login", controllers.GenerateToken)
 	StudentGroup.POST("/CreateStudent", StudentCourseController.CreateStudent)
 	StudentGroup.Use(middlewares.AuthMiddleware())
 	{

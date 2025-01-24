@@ -30,22 +30,32 @@ func NewStudentController(db *sql.DB) *StudentController {
 func (h *StudentController) CreateStudent(c *gin.Context) {
 	var student models.Student
 
+	// Bind JSON to the student object
 	if err := c.ShouldBindJSON(&student); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	query := `INSERT INTO students (full_name, email, password, picture) 
-				VALUES ($1, $2, $3, $4) RETURNING id`
+	// Hash the password before saving
+	if err := models.HashPassword(&student, student.Password); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+		return
+	}
 
+	// Raw SQL query to insert the student
+	query := `INSERT INTO students (full_name, username, email, password, picture) 
+			  VALUES ($1, $2, $3, $4, $5) RETURNING id`
 	var id uint
-	err := h.db.QueryRow(query, student.FullName, student.Email, student.Password, student.Picture).Scan(&id)
+	err := h.db.QueryRow(query, student.FullName, student.Username, student.Email, student.Password, student.Picture).Scan(&id)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
+	// Set the ID for the student object
 	student.ID = id
+
+	// Return the created student
 	c.JSON(http.StatusCreated, student)
 }
 

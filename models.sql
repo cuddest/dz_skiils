@@ -131,4 +131,3 @@ CREATE TABLE exam_quizzes (
     option4 VARCHAR(255) NOT NULL,
     answer INTEGER NOT NULL,
     exam_id INTEGER REFERENCES exams(id) ON DELETE CASCADE
-);
