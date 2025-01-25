@@ -6,6 +6,16 @@ definitions:
       quizz_id:
         type: integer
     type: object
+  controllers.TokenRequest:
+    properties:
+      email:
+        description: Can be either email or username
+        type: string
+      password:
+        type: string
+      role:
+        type: string
+    type: object
   models.Answer:
     properties:
       Answer:
@@ -2472,12 +2482,12 @@ paths:
       description: Authenticate a user (teacher or student) and generate an access
         token
       parameters:
-      - description: Login credentials (username/email and password)
+      - description: Login credentials (identifier (email or username) and password)
         in: body
         name: credentials
         required: true
         schema:
-          type: object
+          $ref: '#/definitions/controllers.TokenRequest'
       produces:
       - application/json
       responses:
@@ -2856,12 +2866,12 @@ paths:
       description: Authenticate a user (teacher or student) and generate an access
         token
       parameters:
-      - description: Login credentials (username/email and password)
+      - description: Login credentials (identifier (email or username) and password)
         in: body
         name: credentials
         required: true
         schema:
-          type: object
+          $ref: '#/definitions/controllers.TokenRequest'
       produces:
       - application/json
       responses:

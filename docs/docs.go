@@ -3267,12 +3267,12 @@ const docTemplate = `{
                 "summary": "User login",
                 "parameters": [
                     {
-                        "description": "Login credentials (username/email and password)",
+                        "description": "Login credentials (identifier (email or username) and password)",
                         "name": "credentials",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/controllers.TokenRequest"
                         }
                     }
                 ],
@@ -3839,12 +3839,12 @@ const docTemplate = `{
                 "summary": "User login",
                 "parameters": [
                     {
-                        "description": "Login credentials (username/email and password)",
+                        "description": "Login credentials (identifier (email or username) and password)",
                         "name": "credentials",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "object"
+                            "$ref": "#/definitions/controllers.TokenRequest"
                         }
                     }
                 ],
@@ -4203,6 +4203,21 @@ const docTemplate = `{
                 },
                 "quizz_id": {
                     "type": "integer"
+                }
+            }
+        },
+        "controllers.TokenRequest": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "description": "Can be either email or username",
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
                 }
             }
         },
