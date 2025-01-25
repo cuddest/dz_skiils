@@ -10,8 +10,9 @@ import (
 )
 
 type TokenRequest struct {
-	Identifier string `json:"identifier"`
+	Identifier string `json:"identifier"` // Can be either email or username
 	Password   string `json:"password"`
+	Role       string `json:"role"`
 }
 
 // @Summary User login
@@ -19,7 +20,7 @@ type TokenRequest struct {
 // @Tags authentication
 // @Accept json
 // @Produce json
-// @Param credentials body object true "Login credentials (username/email and password)"
+// @Param credentials body TokenRequest true "Login credentials (identifier (email or username) and password)"
 // @Success 200 {object} map[string]interface{} "Returns JWT token"
 // @Failure 400 {object} map[string]interface{} "Invalid input"
 // @Failure 401 {object} map[string]interface{} "Authentication failed"
@@ -27,12 +28,7 @@ type TokenRequest struct {
 // @Router /teachers/login [post]
 // @Router /students/login [post]
 func GenerateToken(context *gin.Context) {
-	var input = struct {
-		Email    string `json:"email"`
-		Username string `json:"username"`
-		Password string `json:"password"`
-		Role     string `json:"role"`
-	}{}
+	var input TokenRequest
 
 	if err := context.ShouldBindJSON(&input); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -50,7 +46,7 @@ func GenerateToken(context *gin.Context) {
 	var user models.User
 	if input.Role == "teacher" {
 		var teacher models.Teacher
-		record := config.DB.Where("email = ? OR username = ?", input.Email, input.Username).First(&teacher)
+		record := config.DB.Where("email = ? OR username = ?", input.Identifier, input.Identifier).First(&teacher)
 		if record.Error != nil {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found or invalid credentials"})
 			context.Abort()
@@ -59,7 +55,7 @@ func GenerateToken(context *gin.Context) {
 		user = &teacher
 	} else {
 		var student models.Student
-		record := config.DB.Where("email = ? OR username = ?", input.Email, input.Username).First(&student)
+		record := config.DB.Where("email = ? OR username = ?", input.Identifier, input.Identifier).First(&student)
 		if record.Error != nil {
 			context.JSON(http.StatusUnauthorized, gin.H{"error": "user not found or invalid credentials"})
 			context.Abort()
