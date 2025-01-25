@@ -10,7 +10,7 @@ import (
 )
 
 type TokenRequest struct {
-	Identifier string `json:"identifier"` // Can be either email or username
+	Identifier string `json:"email"` // Can be either email or username
 	Password   string `json:"password"`
 	Role       string `json:"role"`
 }
