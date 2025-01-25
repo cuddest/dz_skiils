@@ -368,6 +368,38 @@ paths:
       summary: Get all courses
       tags:
       - courses
+  /Courses/createCourse:
+    post:
+      consumes:
+      - application/json
+      description: Create a new course
+      parameters:
+      - description: Course object
+        in: body
+        name: course
+        required: true
+        schema:
+          $ref: '#/definitions/models.Course'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Course'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create new course
+      tags:
+      - courses
   /Courses/get:
     post:
       consumes:
