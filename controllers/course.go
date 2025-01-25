@@ -70,7 +70,6 @@ func (h *CourseController) validateCourse(course *models.Course) error {
 // @Failure 500 {object} map[string]interface{}
 // @Router /Courses/createCourse [post]
 // CreateCourse creates a new course
-
 func (h *CourseController) CreateCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
