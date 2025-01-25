@@ -127,6 +127,12 @@ func (h *TeacherController) CreateTeacher(c *gin.Context) {
 		return
 	}
 
+	// Hash the password before saving
+	if err := models.HashPassword(&teacher, teacher.Password); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to hash password"})
+		return
+	}
+
 	tx, err := h.db.BeginTx(ctx, nil)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to start transaction"})
@@ -134,12 +140,10 @@ func (h *TeacherController) CreateTeacher(c *gin.Context) {
 	}
 	defer tx.Rollback()
 
-	// Insert teacher
 	err = tx.QueryRowContext(ctx, createTeacherQuery,
 		teacher.FullName, teacher.Username, teacher.Email,
 		teacher.Password, teacher.Picture, teacher.Skills,
 		teacher.Degrees, teacher.Experience).Scan(&teacher.ID)
-
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create teacher"})
 		return

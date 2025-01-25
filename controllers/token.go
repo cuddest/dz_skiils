@@ -29,7 +29,6 @@ type TokenRequest struct {
 // @Router /students/login [post]
 func GenerateToken(context *gin.Context) {
 	var input TokenRequest
-
 	if err := context.ShouldBindJSON(&input); err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		context.Abort()
@@ -44,6 +43,7 @@ func GenerateToken(context *gin.Context) {
 	}
 
 	var user models.User
+	var userID uint
 	if input.Role == "teacher" {
 		var teacher models.Teacher
 		record := config.DB.Where("email = ? OR username = ?", input.Identifier, input.Identifier).First(&teacher)
@@ -53,6 +53,7 @@ func GenerateToken(context *gin.Context) {
 			return
 		}
 		user = &teacher
+		userID = teacher.ID
 	} else {
 		var student models.Student
 		record := config.DB.Where("email = ? OR username = ?", input.Identifier, input.Identifier).First(&student)
@@ -62,6 +63,7 @@ func GenerateToken(context *gin.Context) {
 			return
 		}
 		user = &student
+		userID = student.ID
 	}
 
 	credentialError := models.CheckPassword(user, input.Password)
@@ -92,5 +94,6 @@ func GenerateToken(context *gin.Context) {
 		"token":    tokenString,
 		"username": username,
 		"role":     input.Role,
+		"userID":   userID,
 	})
 }
