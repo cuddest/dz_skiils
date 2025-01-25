@@ -75,7 +75,7 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
 	defer cancel()
 
 	var course models.Course
-	if err := c.ShouldBindJSON(&course); err != nil {
+	if err := c.ShouldBind(&course); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
