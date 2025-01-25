@@ -113,34 +113,46 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /Courses/get [post]
 // GetCourse retrieves a course by ID
-func (h *CourseController) GetCourse(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
-	defer cancel()
+package controllers
 
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid ID format"})
-		return
-	}
+import (
+    "net/http"
+    "path/filepath"
+    
+    "github.com/gin-gonic/gin"
+    "your-project/models"
+)
 
-	var course models.Course
-	err = h.db.QueryRowContext(ctx, getCourseQuery, id).Scan(
-		&course.ID, &course.Name, &course.Description,
-		&course.Pricing, &course.Duration, &course.Image,
-		&course.Language, &course.Level, &course.TeacherID,
-		&course.CategoryID,
-	)
+type CourseController struct {
+    db *gorm.DB
+}
 
-	if err == sql.ErrNoRows {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Course not found"})
-		return
-	}
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve course"})
-		return
-	}
+func (h *CourseController) CreateCourse(c *gin.Context) {
+    var course models.Course
+    
+    // Bind form data and file
+    if err := c.ShouldBind(&course); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
 
-	c.JSON(http.StatusOK, course)
+    // Save uploaded file
+    if course.Image != nil {
+        filename := filepath.Join("uploads", course.Image.Filename)
+        if err := c.SaveUploadedFile(course.Image, filename); err != nil {
+            c.JSON(http.StatusInternalServerError, gin.H{"error": "File upload failed"})
+            return
+        }
+    }
+
+    // Create course in database
+    result := h.db.Create(&course)
+    if result.Error != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+        return
+    }
+
+    c.JSON(http.StatusCreated, course)
 }
 
 // Course Controller Swagger Documentation
