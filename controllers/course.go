@@ -101,12 +101,9 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
 	course.ID = id
 	c.JSON(http.StatusCreated, course)
  }
-// GetAllCourses retrieves all courses
-func (h *CourseController) GetAllCourses(c *gin.Context) {
+ func (h *CourseController) GetAllCourses(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
-
-
 
 	rows, err := h.db.QueryContext(ctx, getAllCoursesQuery)
 	if err != nil {
@@ -118,14 +115,14 @@ func (h *CourseController) GetAllCourses(c *gin.Context) {
 	var courses []models.Course
 	for rows.Next() {
 		var course models.Course
-		var category models.Category // Assuming there's a Category struct in models
+		var category models.Category
 
 		// Scan course and category details
 		if err := rows.Scan(
 			&course.ID, &course.Name, &course.Description,
 			&course.Pricing, &course.Duration, &course.Image,
 			&course.Language, &course.Level, &course.TeacherID,
-			&category.ID, &category.Name,
+			&category.ID, &category.Name, &category.Description,
 		); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process courses"})
 			return
