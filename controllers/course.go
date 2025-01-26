@@ -24,15 +24,8 @@ const (
 		WHERE id = $1`
 
 	getAllCoursesQuery = `
-		SELECT 
-			c.id, c.name, c.description, c.pricing, c.duration, c.image, 
-			c.language, c.level, c.teacher_id, c.category_id, 
-			cat.id AS category_id, cat.name AS category_name, cat.description AS category_description
-		FROM 
-			courses c
-		JOIN 
-			categories cat ON c.category_id = cat.id
-	`
+		SELECT id, name, description, pricing, duration, image, language, level, teacher_id, category_id 
+		FROM courses`
 
 
 	updateCourseQuery = `
@@ -101,7 +94,7 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
 	course.ID = id
 	c.JSON(http.StatusCreated, course)
  }
-func (h *CourseController) GetAllCourses(c *gin.Context) {
+ func (h *CourseController) GetAllCourses(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
 
@@ -115,21 +108,15 @@ func (h *CourseController) GetAllCourses(c *gin.Context) {
 	var courses []models.Course
 	for rows.Next() {
 		var course models.Course
-		var category models.Category
-
-		// Scan course and category details
 		if err := rows.Scan(
 			&course.ID, &course.Name, &course.Description,
 			&course.Pricing, &course.Duration, &course.Image,
 			&course.Language, &course.Level, &course.TeacherID,
-			&category.ID, &category.Name,
+			&course.CategoryID,
 		); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process courses"})
 			return
 		}
-
-		// Attach the category object to the course
-		course.Category = category
 		courses = append(courses, course)
 	}
 
