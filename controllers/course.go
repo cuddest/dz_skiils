@@ -127,7 +127,7 @@ func (h *CourseController) GetAllCourses(c *gin.Context) {
 			&course.ID, &course.Name, &course.Description,
 			&course.Pricing, &course.Duration, &course.Image,
 			&course.Language, &course.Level, &course.TeacherID,
-			&category.ID, &category.Name, &category.Description,
+			&category.ID, &category.Name,
 		); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process courses"})
 			return
@@ -138,7 +138,13 @@ func (h *CourseController) GetAllCourses(c *gin.Context) {
 		courses = append(courses, course)
 	}
 
-	if err := rows
+	if err := rows.Err(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error processing courses"})
+		return
+	}
+
+	c.JSON(http.StatusOK, courses)
+}
 
 // UpdateCourse updates a course
 func (h *CourseController) UpdateCourse(c *gin.Context) {
