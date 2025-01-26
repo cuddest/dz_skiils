@@ -71,34 +71,61 @@ func (h *CourseController) validateCourse(course *models.Course) error {
 // @Router /Courses/createCourse [post]
 // CreateCourse creates a new course
 func (h *CourseController) CreateCourse(c *gin.Context) {
-	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
-	defer cancel()
+    ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+    defer cancel()
 
-	var course models.Course
-	if err := c.ShouldBind(&course); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+    var course models.Course
+    if err := c.ShouldBind(&course); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
 
-	if err := h.validateCourse(&course); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+    // Handle file upload
+    file, err := c.FormFile("image")
+    if err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "No image uploaded"})
+        return
+    }
 
-	var id uint
-	err := h.db.QueryRowContext(ctx, createCourseQuery,
-		course.Name, course.Description, course.Pricing,
-		course.Duration, course.Image, course.Language,
-		course.Level, course.TeacherID, course.CategoryID,
-	).Scan(&id)
+    // Generate unique filename
+    filename := fmt.Sprintf("uploads/courses/%s_%d%s", 
+        course.Name, 
+        time.Now().Unix(), 
+        filepath.Ext(file.Filename))
 
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create course"})
-		return
-	}
+    // Ensure upload directory exists
+    if err := os.MkdirAll(filepath.Dir(filename), os.ModePerm); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create upload directory"})
+        return
+    }
 
-	course.ID = id
-	c.JSON(http.StatusCreated, course)
+    // Save file
+    if err := c.SaveUploadedFile(file, filename); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to save image"})
+        return
+    }
+
+    // Store file path instead of FileHeader
+    course.Image = filename
+
+    if err := h.validateCourse(&course); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    var id uint
+    err = h.db.QueryRowContext(ctx, createCourseQuery,
+        course.Name, course.Description, course.Pricing,
+        course.Duration, course.Image, course.Language,
+        course.Level, course.TeacherID, course.CategoryID,
+    ).Scan(&id)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create course"})
+        return
+    }
+
+    course.ID = id
+    c.JSON(http.StatusCreated, course)
 }
 
 // @Summary Get course by ID
