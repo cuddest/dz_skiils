@@ -64,15 +64,16 @@ func (h *CourseController) validateCourse(course *models.Course) error {
 
 // CreateCourse creates a new course
 func (h *CourseController) CreateCourse(c *gin.Context) {
+    ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
+    defer cancel()
+
     var course models.Course
-    
-    // Use ShouldBind with form data
     if err := c.ShouldBind(&course); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
 
-    // Handle file upload separately
+    // Handle file upload
     file, err := c.FormFile("image")
     if err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": "No image uploaded"})
@@ -97,21 +98,26 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
         return
     }
 
-    // Update image path
+    // Store file path
     course.Image = filename
 
-    // Validate and create course
     if err := h.validateCourse(&course); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
 
-    result := h.db.Create(&course)
-    if result.Error != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
+    var id uint
+    err = h.db.QueryRowContext(ctx, createCourseQuery,
+        course.Name, course.Description, course.Pricing,
+        course.Duration, course.Image, course.Language,
+        course.Level, course.TeacherID, course.CategoryID,
+    ).Scan(&id)
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to create course"})
         return
     }
 
+    course.ID = id
     c.JSON(http.StatusCreated, course)
 }
 // GetAllCourses retrieves all courses
