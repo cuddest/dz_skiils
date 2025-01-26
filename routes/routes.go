@@ -50,7 +50,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	CategoryGroup.Use(middlewares.AuthMiddleware())
 	{
 		CategoryGroup.GET("/all", CategoryController.GetAllCategories)
-		CategoryGroup.POST("/get", CategoryController.GetCategory)
+		CategoryGroup.POST("/get/:id", CategoryController.GetCategory)
 		CategoryGroup.POST("/createCategory", CategoryController.CreateCategory)
 		CategoryGroup.PUT("/updateCategory", CategoryController.UpdateCategory)
 		CategoryGroup.DELETE("/DeleteCategory", CategoryController.DeleteCategory)
