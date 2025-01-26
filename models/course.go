@@ -6,7 +6,7 @@ type Course struct {
     Description string `json:"Description"`
     Pricing     string `json:"Pricing"`
     Duration    string `json:"Duration"`
-    Image       string `json:"Image" form:"image"`
+    Image       string `json:"Image"`
     Language    string `json:"Language"`
     Level       string `json:"Level"`
     TeacherID   uint   `json:"teacher_id"`
