@@ -81,7 +81,7 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
 		RETURNING id`,
 		course.Name, course.Description, course.Pricing,
-		course.Duration,course.image, course.Language,  course.Level, 
+		course.Duration,course.Image, course.Language,  course.Level, 
 		course.TeacherID, course.CategoryID,
 	).Scan(&id)
  
