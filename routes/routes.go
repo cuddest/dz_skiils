@@ -62,7 +62,6 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 	CoursesGroup.Use(middlewares.AuthMiddleware())
 	{
 		CoursesGroup.GET("/all", CourseController.GetAllCourses)
-		CoursesGroup.POST("/get", CourseController.GetCourse)
 		CoursesGroup.POST("/createCourse", CourseController.CreateCourse)
 		CoursesGroup.PUT("/updateCourse", CourseController.UpdateCourse)
 		CoursesGroup.DELETE("/DeleteCourse", CourseController.DeleteCourse)

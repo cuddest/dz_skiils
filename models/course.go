@@ -1,3 +1,5 @@
+package models
+
 type Course struct {
     ID          uint        `gorm:"primaryKey" json:"ID"`
     Name        string      `json:"Name"`

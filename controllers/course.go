@@ -4,7 +4,10 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 	"time"
 
@@ -59,16 +62,6 @@ func (h *CourseController) validateCourse(course *models.Course) error {
 	return nil
 }
 
-// @Summary Create new course
-// @Description Create a new course
-// @Tags courses
-// @Accept json
-// @Produce json
-// @Param course body models.Course true "Course object"
-// @Success 201 {object} models.Course
-// @Failure 400 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /Courses/createCourse [post]
 // CreateCourse creates a new course
 func (h *CourseController) CreateCourse(c *gin.Context) {
     ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -128,70 +121,6 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
     c.JSON(http.StatusCreated, course)
 }
 
-// @Summary Get course by ID
-// @Description Retrieve a course by its ID
-// @Tags courses
-// @Accept json
-// @Produce json
-// @Param id path int true "Course ID"
-// @Success 200 {object} models.Course
-// @Failure 400 {object} map[string]interface{}
-// @Failure 404 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /Courses/get [post]
-// GetCourse retrieves a course by ID
-package controllers
-
-import (
-    "net/http"
-    "path/filepath"
-    
-    "github.com/gin-gonic/gin"
-    "your-project/models"
-)
-
-type CourseController struct {
-    db *gorm.DB
-}
-
-func (h *CourseController) CreateCourse(c *gin.Context) {
-    var course models.Course
-    
-    // Bind form data and file
-    if err := c.ShouldBind(&course); err != nil {
-        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-        return
-    }
-
-    // Save uploaded file
-    if course.Image != nil {
-        filename := filepath.Join("uploads", course.Image.Filename)
-        if err := c.SaveUploadedFile(course.Image, filename); err != nil {
-            c.JSON(http.StatusInternalServerError, gin.H{"error": "File upload failed"})
-            return
-        }
-    }
-
-    // Create course in database
-    result := h.db.Create(&course)
-    if result.Error != nil {
-        c.JSON(http.StatusInternalServerError, gin.H{"error": result.Error.Error()})
-        return
-    }
-
-    c.JSON(http.StatusCreated, course)
-}
-
-// Course Controller Swagger Documentation
-
-// @Summary Get all courses
-// @Description Retrieve a list of all courses
-// @Tags courses
-// @Accept json
-// @Produce json
-// @Success 200 {array} models.Course
-// @Failure 500 {object} map[string]interface{}
-// @Router /Courses/all [get]
 // GetAllCourses retrieves all courses
 func (h *CourseController) GetAllCourses(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -227,18 +156,6 @@ func (h *CourseController) GetAllCourses(c *gin.Context) {
 	c.JSON(http.StatusOK, courses)
 }
 
-// @Summary Update course
-// @Description Update an existing course
-// @Tags courses
-// @Accept json
-// @Produce json
-// @Param id path int true "Course ID"
-// @Param course body models.Course true "Course object"
-// @Success 200 {object} models.Course
-// @Failure 400 {object} map[string]interface{}
-// @Failure 404 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /Courses/updateCourse [put]
 // UpdateCourse updates a course
 func (h *CourseController) UpdateCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
@@ -298,17 +215,6 @@ func (h *CourseController) UpdateCourse(c *gin.Context) {
 	c.JSON(http.StatusOK, course)
 }
 
-// @Summary Delete course
-// @Description Delete a course by ID
-// @Tags courses
-// @Accept json
-// @Produce json
-// @Param id path int true "Course ID"
-// @Success 200 {object} map[string]interface{}
-// @Failure 400 {object} map[string]interface{}
-// @Failure 404 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /Courses/DeleteCourse [delete]
 // DeleteCourse deletes a course
 func (h *CourseController) DeleteCourse(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
