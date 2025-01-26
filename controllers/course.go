@@ -101,7 +101,7 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
 	course.ID = id
 	c.JSON(http.StatusCreated, course)
  }
- func (h *CourseController) GetAllCourses(c *gin.Context) {
+func (h *CourseController) GetAllCourses(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
 
@@ -122,7 +122,7 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
 			&course.ID, &course.Name, &course.Description,
 			&course.Pricing, &course.Duration, &course.Image,
 			&course.Language, &course.Level, &course.TeacherID,
-			&category.ID, &category.Name, &category.Description,
+			&category.ID, &category.Name,
 		); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to process courses"})
 			return
