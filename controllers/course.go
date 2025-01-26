@@ -23,7 +23,7 @@ const (
 		FROM courses 
 		WHERE id = $1`
 
-	const getAllCoursesQuery = `
+	getAllCoursesQuery = `
 		SELECT 
 			c.id, c.name, c.description, c.pricing, c.duration, c.image, 
 			c.language, c.level, c.teacher_id, c.category_id, 
