@@ -23,9 +23,17 @@ const (
 		FROM courses 
 		WHERE id = $1`
 
-	getAllCoursesQuery = `
-		SELECT id, name, description, pricing, duration, image, language, level, teacher_id, category_id 
-		FROM courses`
+	const getAllCoursesQuery = `
+		SELECT 
+			c.id, c.name, c.description, c.pricing, c.duration, c.image, 
+			c.language, c.level, c.teacher_id, c.category_id, 
+			cat.id AS category_id, cat.name AS category_name, cat.description AS category_description
+		FROM 
+			courses c
+		JOIN 
+			categories cat ON c.category_id = cat.id
+	`
+
 
 	updateCourseQuery = `
 		UPDATE courses 
@@ -98,17 +106,7 @@ func (h *CourseController) GetAllCourses(c *gin.Context) {
 	ctx, cancel := context.WithTimeout(c.Request.Context(), 10*time.Second)
 	defer cancel()
 
-	// Update the query to include category details
-	const getAllCoursesQuery = `
-		SELECT 
-			c.id, c.name, c.description, c.pricing, c.duration, c.image, 
-			c.language, c.level, c.teacher_id, c.category_id, 
-			cat.id AS category_id, cat.name AS category_name, cat.description AS category_description
-		FROM 
-			courses c
-		JOIN 
-			categories cat ON c.category_id = cat.id
-	`
+
 
 	rows, err := h.db.QueryContext(ctx, getAllCoursesQuery)
 	if err != nil {
