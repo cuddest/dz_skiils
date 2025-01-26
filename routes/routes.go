@@ -64,7 +64,7 @@ func InitRoutes(router *gin.Engine, db *sql.DB) {
 		CoursesGroup.GET("/all", CourseController.GetAllCourses)
 		CoursesGroup.POST("/createCourse", CourseController.CreateCourse)
 		CoursesGroup.PUT("/updateCourse", CourseController.UpdateCourse)
-		CoursesGroup.DELETE("/DeleteCourse", CourseController.DeleteCourse)
+		CoursesGroup.DELETE("/DeleteCourse/:id", CourseController.DeleteCourse)
 
 	}
 	// coursequizz Routes
