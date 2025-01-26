@@ -78,7 +78,7 @@ func (h *CourseController) CreateCourse(c *gin.Context) {
 	err := h.db.QueryRowContext(ctx, `
 		INSERT INTO courses 
 		(name, description, pricing, duration, image, language, level, teacher_id, category_id) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) 
 		RETURNING id`,
 		course.Name, course.Description, course.Pricing,
 		course.Duration,course.image, course.Language,  course.Level, 
